@@ -12,5 +12,7 @@ public interface IUserService {
 	JwtResponse login(HttpSession session, UserLogin userLogin) throws CustomException;
 	
 	void register(UserRegister userRegister) throws CustomException;
+	
+	
 
 }

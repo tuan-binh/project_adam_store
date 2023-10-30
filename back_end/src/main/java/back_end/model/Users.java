@@ -41,4 +41,12 @@ public class Users {
     )
     private Set<Roles> roles = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "favourite",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<Product> favourite = new HashSet<>();
+    
 }
