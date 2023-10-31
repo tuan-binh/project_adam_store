@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Data
 @Builder
-public class UserPrincipal implements UserDetails {
+public class UserPrinciple implements UserDetails {
 	
 	private Long id;
 	
@@ -37,7 +37,7 @@ public class UserPrincipal implements UserDetails {
 	private boolean status;
 	
 	public static UserDetails build(Users users) {
-		return UserPrincipal.builder()
+		return UserPrinciple.builder()
 				  .id(users.getId())
 				  .fullName(users.getFullName())
 				  .email(users.getEmail())

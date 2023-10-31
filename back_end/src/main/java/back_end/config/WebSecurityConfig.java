@@ -54,17 +54,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().configurationSource(request -> {
-					  CorsConfiguration cfg = new CorsConfiguration();
-					  cfg.setAllowedOrigins(Collections.singletonList("http://localhost:5173/"));
-					  cfg.setAllowedMethods(Collections.singletonList("*"));
-					  cfg.setAllowCredentials(true);
-					  cfg.setAllowedHeaders(Collections.singletonList("*"));
-					  cfg.setExposedHeaders(Collections.singletonList("Authorization"));
-					  return cfg;
-				  }).and().csrf().disable()
+		http.cors().and().csrf().disable()
 				  .authorizeRequests()
-				  .antMatchers("/auth/**","/api/**").permitAll()
+				  .antMatchers("/auth/**").permitAll()
+				  .antMatchers("/api/products/**").permitAll()
+				  .antMatchers("/api/categories/**").permitAll()
+				  .antMatchers("/api/color/**").permitAll()
+				  .antMatchers("/api/size/**").permitAll()
+				  .antMatchers("/api/coupon/**").permitAll()
+				  .antMatchers("/api/products/**").permitAll()
+				  .antMatchers("/api/user/**").permitAll()
 				  .anyRequest().authenticated()
 				  .and()
 				  .exceptionHandling().authenticationEntryPoint(jwtEntryPoint).accessDeniedHandler(customAccessDeniedHandler)

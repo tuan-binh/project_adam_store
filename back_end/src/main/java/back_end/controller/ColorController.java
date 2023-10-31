@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/color")
+@CrossOrigin("*")
 public class ColorController {
 	
 	@Autowired

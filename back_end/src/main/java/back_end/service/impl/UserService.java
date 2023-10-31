@@ -2,14 +2,16 @@ package back_end.service.impl;
 
 import back_end.dto.request.UserLogin;
 import back_end.dto.request.UserRegister;
+import back_end.dto.response.CartItemResponse;
 import back_end.dto.response.JwtResponse;
 import back_end.exception.CustomException;
-import back_end.model.RoleName;
-import back_end.model.Roles;
-import back_end.model.Users;
+import back_end.mapper.OrderMapper;
+import back_end.model.*;
+import back_end.repository.IOrderDetailRepository;
+import back_end.repository.IOrderRepository;
 import back_end.repository.IUserRepository;
 import back_end.security.jwt.JwtProvider;
-import back_end.security.user_principal.UserPrincipal;
+import back_end.security.user_principal.UserPrinciple;
 import back_end.service.IRoleService;
 import back_end.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,12 @@ public class UserService implements IUserService {
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private JwtProvider jwtProvider;
+	@Autowired
+	private IOrderRepository orderRepository;
+	@Autowired
+	private IOrderDetailRepository orderDetailRepository;
+	@Autowired
+	private OrderMapper orderMapper;
 	
 	@Override
 	public JwtResponse login(HttpSession session, UserLogin userLogin) throws CustomException {
@@ -70,7 +78,7 @@ public class UserService implements IUserService {
 			throw new CustomException("Username or Password is incorrect");
 		}
 		
-		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+		UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
 		if (!userPrincipal.isStatus()) {
 			throw new CustomException("your account is blocked");
 		}
@@ -123,6 +131,18 @@ public class UserService implements IUserService {
 							 .status(true)
 							 .roles(roles)
 				  .build());
+	}
+	
+	@Override
+	public List<CartItemResponse> getCart(Authentication authentication) throws CustomException {
+		UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
+		Optional<Orders> optionalOrders = orderRepository.findByUsersIdAndStatus(userPrincipal.getId(),false);
+		if(optionalOrders.isPresent()) {
+			return orderDetailRepository.findAllByOrdersId(optionalOrders.get().getId()).stream()
+					  .map(item -> orderMapper.toCartItem(item))
+					  .collect(Collectors.toList());
+		}
+		throw new CustomException("your cart is empty");
 	}
 	
 	public Users findUserByUserName(String email) throws CustomException {

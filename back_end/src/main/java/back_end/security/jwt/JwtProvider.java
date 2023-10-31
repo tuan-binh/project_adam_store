@@ -1,6 +1,6 @@
 package back_end.security.jwt;
 
-import back_end.security.user_principal.UserPrincipal;
+import back_end.security.user_principal.UserPrinciple;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class JwtProvider {
 	@Value("${jwt.expired}")
 	private Long EXPIRED;
 	
-	public String generateToken(UserPrincipal userPrincipal) {
+	public String generateToken(UserPrinciple userPrincipal) {
 		return Jwts.builder().setSubject(userPrincipal.getUsername())
 				  .setIssuedAt(new Date())
 				  .setExpiration(new Date(new Date().getTime() + EXPIRED))

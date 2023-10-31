@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin("*")
 public class ProductController {
 
 	@Autowired
@@ -71,7 +72,7 @@ public class ProductController {
 	}
 	
 	@PutMapping("/{productDetailId}/in/{productId}/status")
-	public ResponseEntity<ProductResponse> changeStatsuProductDetail(@PathVariable Long productDetailId,@PathVariable long productId) throws CustomException {
+	public ResponseEntity<ProductResponse> changeStatusProductDetail(@PathVariable Long productDetailId,@PathVariable long productId) throws CustomException {
 		return new ResponseEntity<>(productService.changeStatusProductDetail(productDetailId,productId),HttpStatus.OK);
 	}
 

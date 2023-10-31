@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/coupon")
+@CrossOrigin("*")
 public class CouponController {
 
 	@Autowired
