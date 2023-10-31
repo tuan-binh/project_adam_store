@@ -33,7 +33,7 @@ public class Users {
 
     private boolean status;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_detail",
             joinColumns = @JoinColumn(name = "user_id"),

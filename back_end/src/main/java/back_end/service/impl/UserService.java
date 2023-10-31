@@ -52,7 +52,7 @@ public class UserService implements IUserService {
 	
 	@Override
 	public JwtResponse login(HttpSession session, UserLogin userLogin) throws CustomException {
-		Authentication authentication = null;
+		Authentication authentication;
 		try {
 			authentication = authenticationManager.authenticate(
 					  new UsernamePasswordAuthenticationToken(userLogin.getEmail(), userLogin.getPassword())
