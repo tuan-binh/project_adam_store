@@ -39,4 +39,22 @@ public class CategoryService implements ICategoryService {
 	public CategoryResponse save(CategoryRequest categoryRequest) {
 		return categoryMapper.toResponse(categoryRepository.save(categoryMapper.toEntity(categoryRequest)));
 	}
+	
+	@Override
+	public CategoryResponse update(CategoryRequest categoryRequest, Long id) {
+		Category category = categoryMapper.toEntity(categoryRequest);
+		category.setId(id);
+		return categoryMapper.toResponse(categoryRepository.save(category));
+	}
+	
+	@Override
+	public CategoryResponse changeStatusCategory(Long id) throws CustomException {
+		Optional<Category> optionalCategory = categoryRepository.findById(id);
+		if(optionalCategory.isPresent()) {
+			Category category = optionalCategory.get();
+			category.setStatus(!category.isStatus());
+			return categoryMapper.toResponse(categoryRepository.save(category));
+		}
+		throw new CustomException("category not found");
+	}
 }

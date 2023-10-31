@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 @Builder
 public class JwtResponse {
-	private Long id;
 	private String token;
 	private final String type = "Bearer";
 	private String fullName;

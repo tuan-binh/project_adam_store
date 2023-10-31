@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
-
+	
 	@Autowired
 	private ICategoryService categoryService;
 	
@@ -25,12 +25,22 @@ public class CategoryController {
 	
 	@GetMapping("/{categoryId}")
 	public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long categoryId) throws CustomException {
-		return new ResponseEntity<>(categoryService.findById(categoryId),HttpStatus.OK);
+		return new ResponseEntity<>(categoryService.findById(categoryId), HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<CategoryResponse> addNewCategory(@RequestAttribute CategoryRequest categoryRequest) {
-		return new ResponseEntity<>(categoryService.save(categoryRequest),HttpStatus.CREATED);
+	public ResponseEntity<CategoryResponse> addNewCategory(@RequestBody CategoryRequest categoryRequest) {
+		return new ResponseEntity<>(categoryService.save(categoryRequest), HttpStatus.CREATED);
 	}
-
+	
+	@PutMapping("/{categoryId}")
+	public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest categoryRequest, @PathVariable Long categoryId) {
+		return new ResponseEntity<>(categoryService.update(categoryRequest,categoryId),HttpStatus.OK);
+	}
+	
+	@PutMapping("/{categoryId}/status")
+	public ResponseEntity<CategoryResponse> changeStatusCategory(@PathVariable Long categoryId) throws CustomException {
+		return new ResponseEntity<>(categoryService.changeStatusCategory(categoryId), HttpStatus.OK);
+	}
+	
 }

@@ -10,4 +10,6 @@ public interface ICategoryService {
 	List<CategoryResponse> findAll();
 	CategoryResponse findById(Long id) throws CustomException;
 	CategoryResponse save(CategoryRequest categoryRequest);
+	CategoryResponse update(CategoryRequest categoryRequest,Long id);
+	CategoryResponse changeStatusCategory(Long id) throws CustomException;
 }
