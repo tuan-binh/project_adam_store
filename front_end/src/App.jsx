@@ -1,10 +1,7 @@
-function App() {
+import Routers from "./routers/Routers";
 
-  return (
-    <>
-      <h1>Hello World!</h1>
-    </>
-  )
+function App() {
+  return <Routers />;
 }
 
-export default App
+export default App;
