@@ -15,38 +15,38 @@ import java.util.Set;
 @Setter
 @Builder
 public class Users {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    private String fullName;
-
-    private String email;
-    
-    @JsonIgnore
-    private String password;
-
-    private String phone;
-
-    private String address;
-
-    private boolean status;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "role_detail",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Roles> roles = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "favourite",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private Set<Product> favourite = new HashSet<>();
-    
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	
+	private String fullName;
+	
+	private String email;
+	
+	@JsonIgnore
+	private String password;
+	
+	private String phone;
+	
+	private String address;
+	
+	private boolean status;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			  name = "role_detail",
+			  joinColumns = @JoinColumn(name = "user_id"),
+			  inverseJoinColumns = @JoinColumn(name = "role_id")
+	)
+	private Set<Roles> roles = new HashSet<>();
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(
+			  name = "favourite",
+			  joinColumns = @JoinColumn(name = "user_id"),
+			  inverseJoinColumns = @JoinColumn(name = "product_id")
+	)
+	private Set<Product> favourite = new HashSet<>();
+	
 }

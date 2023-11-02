@@ -1,11 +1,16 @@
 package back_end.service.impl;
 
 import back_end.dto.request.UserLogin;
+import back_end.dto.request.UserPassword;
 import back_end.dto.request.UserRegister;
+import back_end.dto.request.UserUpdate;
 import back_end.dto.response.CartItemResponse;
 import back_end.dto.response.JwtResponse;
+import back_end.dto.response.OrderResponse;
+import back_end.dto.response.UserResponse;
 import back_end.exception.CustomException;
 import back_end.mapper.OrderMapper;
+import back_end.mapper.UserMapper;
 import back_end.model.*;
 import back_end.repository.IOrderDetailRepository;
 import back_end.repository.IOrderRepository;
@@ -24,10 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,6 +51,8 @@ public class UserService implements IUserService {
 	private IOrderDetailRepository orderDetailRepository;
 	@Autowired
 	private OrderMapper orderMapper;
+	@Autowired
+	private UserMapper userMapper;
 	
 	@Override
 	public JwtResponse login(HttpSession session, UserLogin userLogin) throws CustomException {
@@ -66,7 +70,7 @@ public class UserService implements IUserService {
 				// khong phai lan dau tien sai
 				if (count == 3) {
 					// khoa tai khoan
-					Users users = findUserByUserName(userLogin.getEmail());
+					Users users = userRepository.findByEmail(userLogin.getEmail()).orElseThrow(() -> new CustomException("email not found"));
 					users.setStatus(false);
 					userRepository.save(users);
 					throw new CustomException("your account is blocked");
@@ -125,29 +129,68 @@ public class UserService implements IUserService {
 			});
 		}
 		userRepository.save(Users.builder()
-							 .fullName(userRegister.getFullName())
-							 .email(userRegister.getEmail())
-							 .password(passwordEncoder.encode(userRegister.getPassword()))
-							 .status(true)
-							 .roles(roles)
+				  .fullName(userRegister.getFullName())
+				  .email(userRegister.getEmail())
+				  .password(passwordEncoder.encode(userRegister.getPassword()))
+				  .status(true)
+				  .roles(roles)
 				  .build());
 	}
 	
 	@Override
 	public List<CartItemResponse> getCart(Authentication authentication) throws CustomException {
 		UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
-		Optional<Orders> optionalOrders = orderRepository.findByUsersIdAndStatus(userPrincipal.getId(),false);
-		if(optionalOrders.isPresent()) {
+		Optional<Orders> optionalOrders = orderRepository.findByUsersIdAndStatus(userPrincipal.getId(), false);
+		// trường họp có giỏ hàng thì sẽ trả về những sản phẩm trong giỏ hàng
+		if (optionalOrders.isPresent()) {
 			return orderDetailRepository.findAllByOrdersId(optionalOrders.get().getId()).stream()
 					  .map(item -> orderMapper.toCartItem(item))
 					  .collect(Collectors.toList());
 		}
-		throw new CustomException("your cart is empty");
+		// trường hợp không có giỏ hàng thì sẽ khởi tạo và trả về
+		Orders order = orderRepository.save(Orders.builder()
+				  .orderStatus(OrderStatus.PENDING)
+				  .users(userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new CustomException("user not found")))
+				  .status(false)
+				  .build());
+		return orderDetailRepository.findAllByOrdersId(order.getId()).stream()
+				  .map(item -> orderMapper.toCartItem(item))
+				  .collect(Collectors.toList());
 	}
 	
-	public Users findUserByUserName(String email) throws CustomException {
-		Optional<Users> optionalUsers = userRepository.findByEmail(email);
-		return optionalUsers.orElseThrow(()->new CustomException("email not found"));
+	@Override
+	public List<Product> getFavourite(Authentication authentication) throws CustomException {
+		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+		Users users = userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found"));
+		return new ArrayList<>(users.getFavourite());
 	}
 	
+	@Override
+	public List<OrderResponse> getOrders(Authentication authentication) {
+		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+		return orderRepository.findAllByUsersIdAndStatus(userPrinciple.getId(), true).stream()
+				  .map(item -> orderMapper.toOrderResponse(item))
+				  .collect(Collectors.toList());
+	}
+	
+	@Override
+	public UserResponse updateInformation(UserUpdate userUpdate, Authentication authentication) throws CustomException {
+		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+		Users users = userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found"));
+		users.setAddress(userUpdate.getAddress());
+		users.setPhone(userUpdate.getPhone());
+		return userMapper.toUserResponse(userRepository.save(users));
+	}
+	
+	@Override
+	public UserResponse changePassword(UserPassword userPassword, Authentication authentication) throws CustomException {
+		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+		Users users = userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found"));
+		if (passwordEncoder.matches(userPassword.getOldPassword(), users.getPassword())) {
+			users.setPassword(passwordEncoder.encode(userPassword.getNewPassword()));
+		} else {
+			throw new CustomException("old password not matches");
+		}
+		return userMapper.toUserResponse(userRepository.save(users));
+	}
 }
