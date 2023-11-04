@@ -32,9 +32,9 @@ function UserNavbar() {
         </span>
       </div>
       <div className="link flex gap-5">
-        <NavLink className="sub_link">Home</NavLink>
-        <NavLink className="sub_link">Product</NavLink>
-        <NavLink className="sub_link">New</NavLink>
+        <NavLink to={'/'} className="sub_link">Home</NavLink>
+        <NavLink to={'/products'} className="sub_link">Product</NavLink>
+        <NavLink to={'/news'} className="sub_link">New</NavLink>
       </div>
       <div className="info flex justify-end gap-2 w-96">
         <FavoriteIcon className="hover:cursor-pointer" />

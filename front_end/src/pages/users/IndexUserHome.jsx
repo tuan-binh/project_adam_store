@@ -6,10 +6,10 @@ function IndexUserHome() {
   return (
     <div>
       <UserNavbar />
-      <div>
+      <div style={{ minHeight: 'calc(100vh - 80px)', height: 'calc(100vh - 80px)', overflowX: "hidden", overflowY: 'auto' }}>
         <Outlet />
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 }
