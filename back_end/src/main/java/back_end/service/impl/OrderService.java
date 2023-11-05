@@ -74,11 +74,13 @@ public class OrderService implements IOrderService {
 					throw new CustomException("you must update your information");
 				}
 				// check out với thông tin có sẵn trong tài khoản
-				orders.setLocation(userPrinciple.getAddress());
+				orders.setAddress(userPrinciple.getAddress());
+				orders.setCustomer(checkoutRequest.getCustomer());
 				orders.setPhone(userPrinciple.getPhone());
 			} else {
 				// check out với thông tin khi nhập vào form ở phía front end
-				orders.setLocation(checkoutRequest.getAddress());
+				orders.setAddress(checkoutRequest.getAddress());
+				orders.setCustomer(userPrinciple.getFullName());
 				orders.setPhone(checkoutRequest.getPhone());
 			}
 			// thực hiển tính tổng tiền

@@ -25,7 +25,9 @@ public class Orders {
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd/MM/yyyy")
 	private Date time;
 	
-	private String location;
+	private String address;
+	
+	private String customer;
 	
 	private String phone;
 	

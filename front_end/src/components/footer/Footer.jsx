@@ -1,14 +1,20 @@
 import "../navbar/userNavbar.css";
 
+import { useNavigate } from "react-router-dom";
+
 function Footer() {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-gradient-to-t from-slate-300 p-10">
       <ul className="flex justify-between">
-        <li className="button">
-          <span className="actual-text">&nbsp;ADAM&nbsp;STORE&nbsp;</span>
-          <span aria-hidden="true" className="hover-text">
-            &nbsp;ADAM&nbsp;STORE&nbsp;
-          </span>
+        <li>
+          <div className="button" onClick={() => navigate("/")}>
+            <span className="actual-text">&nbsp;ADAM&nbsp;STORE&nbsp;</span>
+            <span aria-hidden="true" className="hover-text">
+              &nbsp;ADAM&nbsp;STORE&nbsp;
+            </span>
+          </div>
         </li>
         <li>
           <h2 className="text-lg font-semibold uppercase">Giới thiệu</h2>
