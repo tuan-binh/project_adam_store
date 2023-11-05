@@ -28,7 +28,10 @@ function ItemProduct() {
             <h5 className=" text-center block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased uppercase">
               Tailwind card
             </h5>
-            <h6 className="uppercase text-lg underline text-right">500$</h6>
+            <h6 className="uppercase text-lg text-right">
+              <span className="underline">500$</span> -{" "}
+              <span className="underline">1000$</span>
+            </h6>
           </div>
         </div>
       </div>

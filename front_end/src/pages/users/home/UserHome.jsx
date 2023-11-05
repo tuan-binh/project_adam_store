@@ -2,6 +2,7 @@ import Banner from "../../../components/banner/Banner";
 import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
+import UserReviews from "../../../components/user_reviews/UserReviews";
 
 function UserHome() {
   return (
@@ -90,57 +91,8 @@ function UserHome() {
             </div>
           </div>
         </section>
-
         {/* nội dung những người nổi tiếng */}
-        <section>
-          <h2 className="text-center text-3xl">NGƯỜI NỔI TIẾNG</h2>
-          <div className="idol flex gap-5 p-20">
-            <div>
-              <img
-                src="https://theme.hstatic.net/1000333436/1001040510/14/htesti_img_1_large.jpg?v=142"
-                className="shadow-2xl rounded-md"
-                style={{ filter: "blur(0px) grayscale(100%) sepia(0)" }}
-                alt=""
-              />
-              <h3 className="text-center py-3 uppercase text-lg font-semibold">
-                Ca Sĩ Lý Hải
-              </h3>
-            </div>
-            <div>
-              <img
-                src="https://theme.hstatic.net/1000333436/1001040510/14/htesti_img_2_large.jpg?v=142"
-                className="shadow-2xl rounded-md"
-                style={{ filter: "blur(0px) grayscale(100%) sepia(0)" }}
-                alt=""
-              />
-              <h3 className="text-center py-3 uppercase text-lg font-semibold">
-                Ca Sĩ Ngô Kiến Huy
-              </h3>
-            </div>
-            <div>
-              <img
-                src="https://theme.hstatic.net/1000333436/1001040510/14/htesti_img_3_large.jpg?v=142"
-                className="shadow-2xl rounded-md"
-                style={{ filter: "blur(0px) grayscale(100%) sepia(0)" }}
-                alt=""
-              />
-              <h3 className="text-center py-3 uppercase text-lg font-semibold">
-                Nghệ Sĩ Xuân Bắc
-              </h3>
-            </div>
-            <div>
-              <img
-                src="https://theme.hstatic.net/1000333436/1001040510/14/htesti_img_4_large.jpg?v=142"
-                className="shadow-2xl rounded-md"
-                style={{ filter: "blur(0px) grayscale(100%) sepia(0)" }}
-                alt=""
-              />
-              <h3 className="text-center py-3 uppercase text-lg font-semibold">
-                Ca Sĩ Quân AP
-              </h3>
-            </div>
-          </div>
-        </section>
+        <UserReviews />
         {/* đặt làm */}
         <section className="flex justify-center ">
           <div className="w-1/2">
