@@ -26,7 +26,7 @@ public class ApplicationHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(CustomException.class)
 	public String handleExceptionUser(CustomException e) {
-		return "Exception --> " + e.getMessage();
+		return e.getMessage();
 	}
 	
 }

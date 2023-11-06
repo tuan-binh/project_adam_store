@@ -1,18 +1,20 @@
 import { Route, Routes } from "react-router-dom";
 
-import AdminLogin from "../pages/login_register/admin/AdminLogin";
-import Cart from "../pages/users/cart/Cart";
-import Checkout from "../pages/users/checkout/Checkout";
-import Contact from "../pages/users/contact/Contact";
-import Coupon from "../pages/users/coupon/Coupon";
-import Favourite from "../pages/users/favourite/Favourite";
-import IndexUserHome from "../pages/users/IndexUserHome";
-import ProductDetail from "../pages/users/products/detail/ProductDetail";
-import Products from "../pages/users/products/Products";
-import UserHome from "../pages/users/home/UserHome";
-import UserLogin from "../pages/login_register/users/UserLogin";
-import UserOrders from "../pages/users/orders/UserOrders";
-import UserRegister from "../pages/login_register/users/UserRegister";
+import AdminHome from "../admin/home/AdminHome";
+import AdminLogin from "../login_register/admin/AdminLogin";
+import Cart from "../users/cart/Cart";
+import Checkout from "../users/checkout/Checkout";
+import Contact from "../users/contact/Contact";
+import Coupon from "../users/coupon/Coupon";
+import Favourite from "../users/favourite/Favourite";
+import IndexAdminHome from "../admin/IndexAdminHome";
+import IndexUserHome from "../users/IndexUserHome";
+import ProductDetail from "../users/products/detail/ProductDetail";
+import Products from "../users/products/Products";
+import UserHome from "../users/home/UserHome";
+import UserLogin from "../login_register/users/UserLogin";
+import UserOrders from "../users/orders/UserOrders";
+import UserRegister from "../login_register/users/UserRegister";
 
 function Routers() {
   return (
@@ -37,6 +39,10 @@ function Routers() {
       <Route path="/register" Component={UserRegister}></Route>
       {/* admin */}
       <Route path="/admin/login" Component={AdminLogin}></Route>
+      {/* home admin */}
+      <Route path="/admin" Component={IndexAdminHome}>
+        <Route index Component={AdminHome}></Route>
+      </Route>
     </Routes>
   );
 }

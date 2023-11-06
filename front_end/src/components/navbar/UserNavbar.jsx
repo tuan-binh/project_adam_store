@@ -2,6 +2,7 @@ import "./userNavbar.css";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
+import Button from "@mui/material/Button";
 import ChangePassword from "../modal/ChangePassword";
 import DescriptionIcon from "@mui/icons-material/Description";
 import Fade from "@mui/material/Fade";
@@ -14,10 +15,16 @@ import MenuItem from "@mui/material/MenuItem";
 import Person4Icon from "@mui/icons-material/Person4";
 import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Tooltip from "@mui/material/Tooltip";
+import { handle_logout } from "../../thunk/authThunk";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 
 function UserNavbar() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -30,12 +37,24 @@ function UserNavbar() {
 
   // handle show information
   const [openInformation, setOpenInformation] = useState(false);
-  const handleOpenInformation = () => setOpenInformation(true);
+  const handleOpenInformation = () => {
+    setOpenInformation(true);
+    handleClose();
+  };
   const handleCloseInformation = () => setOpenInformation(false);
   // handle show password
   const [openPassword, setOpenPassword] = useState(false);
-  const handleOpenPassword = () => setOpenPassword(true);
+  const handleOpenPassword = () => {
+    setOpenPassword(true);
+    handleClose();
+  };
   const handleClosePassword = () => setOpenPassword(false);
+
+  // handle favourite
+  const handleFavourite = () => {
+    navigate("/favourite");
+    handleClose();
+  };
 
   // handle show orders
   const handleNavigateToOrders = () => {
@@ -43,8 +62,10 @@ function UserNavbar() {
     handleClose();
   };
 
+  // handle logout
   const handleLogout = () => {
     navigate("/");
+    dispatch(handle_logout());
     handleClose();
   };
 
@@ -72,57 +93,86 @@ function UserNavbar() {
           </NavLink>
         </div>
         <div className="info flex justify-end gap-2 w-96">
-          <FavoriteIcon
-            onClick={() => navigate("/favourite")}
-            className="hover:cursor-pointer"
-          />
-          <div>
-            <PersonIcon
-              className="hover:cursor-pointer"
-              id="fade-button"
-              aria-controls={open ? "fade-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-            />
-            <Menu
-              id="fade-menu"
-              MenuListProps={{
-                "aria-labelledby": "fade-button",
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              TransitionComponent={Fade}
-              sx={{
-                marginTop: "10px",
-                ".MuiList-root": {
-                  width: "150px",
-                  padding: "0",
-                },
-              }}
-            >
-              <MenuItem onClick={handleOpenInformation} className="flex gap-2">
-                <Person4Icon /> <span>Info</span>
-              </MenuItem>
-              <MenuItem onClick={handleNavigateToOrders} className="flex gap-2">
-                <DescriptionIcon />
-                <span>Order</span>
-              </MenuItem>
-              <MenuItem onClick={handleOpenPassword} className="flex gap-2">
-                <LockIcon />
-                <span>Password</span>
-              </MenuItem>
-              <MenuItem onClick={handleLogout} className="flex gap-2">
-                <LogoutIcon />
-                <span>Logout</span>
-              </MenuItem>
-            </Menu>
-          </div>
-          <ShoppingCartIcon
-            onClick={() => navigate("/cart")}
-            className="hover:cursor-pointer"
-          />
+          {user ? (
+            <>
+              <div>
+                <Tooltip title={user.fullName}>
+                  <PersonIcon
+                    className="hover:cursor-pointer"
+                    id="fade-button"
+                    aria-controls={open ? "fade-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  />
+                </Tooltip>
+                <Menu
+                  id="fade-menu"
+                  MenuListProps={{
+                    "aria-labelledby": "fade-button",
+                  }}
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  TransitionComponent={Fade}
+                  sx={{
+                    marginTop: "10px",
+                    ".MuiList-root": {
+                      width: "150px",
+                      padding: "0",
+                    },
+                  }}
+                >
+                  <MenuItem
+                    onClick={handleOpenInformation}
+                    className="flex gap-2"
+                  >
+                    <Person4Icon /> <span>Info</span>
+                  </MenuItem>
+                  <MenuItem onClick={handleFavourite} className="flex gap-2">
+                    <FavoriteIcon />
+                    <span>Favourite</span>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleNavigateToOrders}
+                    className="flex gap-2"
+                  >
+                    <DescriptionIcon />
+                    <span>Order</span>
+                  </MenuItem>
+                  <MenuItem onClick={handleOpenPassword} className="flex gap-2">
+                    <LockIcon />
+                    <span>Password</span>
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout} className="flex gap-2">
+                    <LogoutIcon />
+                    <span>Logout</span>
+                  </MenuItem>
+                </Menu>
+              </div>
+              <ShoppingCartIcon
+                onClick={() => navigate("/cart")}
+                className="hover:cursor-pointer"
+              />
+            </>
+          ) : (
+            <>
+              <Button
+                variant="text"
+                sx={{ color: "#2c3e50", "&:hover": { color: "#34495e" } }}
+                onClick={() => navigate("/register")}
+              >
+                SIGN UP
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ bgcolor: "#2c3e50", "&:hover": { bgcolor: "#34495e" } }}
+                onClick={() => navigate("/login")}
+              >
+                SIGN IN
+              </Button>
+            </>
+          )}
         </div>
       </nav>
       {openInformation && (

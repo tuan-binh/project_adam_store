@@ -1,16 +1,57 @@
+import { useEffect, useState } from "react";
+
 import Button from "@mui/material/Button";
 import ForgetPassword from "../../../components/modal/ForgetPassword";
 import TextField from "@mui/material/TextField";
+import { post_login } from "../../../thunk/authThunk";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { validateBlank } from "../../../utils/ValidateForm";
 
 function UserLogin() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // handle forget password
   const [openForgetPassword, setOpenForgetPassword] = useState(false);
   const handleOpenForgetPassword = () => setOpenForgetPassword(true);
   const handleCloseForgetPassword = () => setOpenForgetPassword(false);
+
+  const [error, setError] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // form login
+    const formLogin = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
+    // validate
+    if (validateBlank(formLogin.email)) {
+      setErrorEmail("you can't blank email");
+      return;
+    }
+    if (validateBlank(formLogin.password)) {
+      setErrorPassword("you can't blank password");
+      return;
+    }
+    // dispatch form login
+    dispatch(post_login(formLogin)).then((resp) => {
+      if (resp === true) {
+        navigate("/");
+      } else {
+        setError(resp);
+      }
+    });
+  };
+
+  useEffect(() => {
+    setError("");
+    setErrorEmail("");
+    setErrorPassword("");
+  }, []);
 
   return (
     <>
@@ -30,21 +71,31 @@ function UserLogin() {
           }}
         >
           <form
+            onSubmit={handleLogin}
             action=""
             className="bg-white shadow-2xl p-5 rounded-lg flex flex-col gap-4"
             style={{ width: "400px" }}
           >
             <h1 className="text-center text-2xl">SIGN IN</h1>
+            {error && (
+              <p className="text-center text-red-600 text-lg font-semibold">
+                {error}
+              </p>
+            )}
             <TextField
+              error={errorEmail}
+              name="email"
               id="filled-basic"
-              label="Email"
+              label={errorEmail ? errorEmail : "Email"}
               variant="filled"
               size="small"
               fullWidth
             />
             <TextField
+              error={errorPassword}
+              name="password"
               id="filled-basic"
-              label="Password"
+              label={errorPassword ? errorPassword : "Password"}
               variant="filled"
               size="small"
               type="password"
@@ -64,7 +115,7 @@ function UserLogin() {
                 forget your password?
               </span>
             </div>
-            <Button variant="contained" fullWidth>
+            <Button type="submit" variant="contained" fullWidth>
               SIGN IN
             </Button>
           </form>

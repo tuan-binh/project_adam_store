@@ -21,9 +21,8 @@ function ItemCoupon() {
           <b className="uppercase">Persent :</b> <span>10%</span>
         </p>
       </div>
-      <div className="flex justify-between items-end">
+      <div className="flex justify-between items-center">
         <p>
-          <b className="uppercase">Date : </b>
           <span>12/10/2023</span>
           <span> - </span>
           <span>18/11/2023</span>

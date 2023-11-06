@@ -8,7 +8,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PropertiesProduct from "../../../../components/modal/PropertiesProduct";
-import UserReviews from "../../../../components/user_reviews/UserReviews";
 import { useState } from "react";
 
 function ProductDetail() {
@@ -121,7 +120,6 @@ function ProductDetail() {
           </div>
         </div>
       </div>
-      <UserReviews />
     </div>
   );
 }

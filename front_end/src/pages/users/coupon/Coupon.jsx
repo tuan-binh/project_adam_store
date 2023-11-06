@@ -17,7 +17,7 @@ function Coupon() {
             />
           </div>
         </div>
-        <div className="body flex gap-5 flex-wrap pt-10">
+        <div className="body flex gap-4 justify-around flex-wrap pt-10">
           <ItemCoupon />
           <ItemCoupon />
           <ItemCoupon />

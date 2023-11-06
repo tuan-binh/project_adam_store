@@ -1,9 +1,59 @@
+import { useEffect, useState } from "react";
+
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { post_register } from "../../../thunk/authThunk";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { validateBlank } from "../../../utils/ValidateForm";
 
 function UserRegister() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [errorFullName, setErrorFullName] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    // form register
+    const formRegister = {
+      fullName: e.target.fullName.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
+    // validate
+    if (validateBlank(formRegister.fullName)) {
+      setErrorFullName("You can't blank fullName");
+      return;
+    }
+    if (validateBlank(formRegister.email)) {
+      setErrorEmail("You can't blank email");
+      return;
+    }
+    if (validateBlank(formRegister.password)) {
+      setErrorPassword("You can't blank password");
+      return;
+    }
+    if (formRegister.password !== e.target.confirmPassword.value) {
+      setErrorPassword("passwords are not the same");
+      return;
+    }
+    dispatch(post_register(formRegister)).then((resp) => {
+      if (resp === true) {
+        navigate("/login");
+      } else {
+        setErrorEmail(resp);
+      }
+    });
+  };
+
+  useEffect(() => {
+    setErrorFullName("");
+    setErrorEmail("");
+    setErrorPassword("");
+  }, []);
 
   return (
     <div
@@ -22,28 +72,45 @@ function UserRegister() {
         }}
       >
         <form
+          onSubmit={handleRegister}
           action=""
           className="bg-white shadow-2xl p-5 rounded-lg flex flex-col gap-4"
           style={{ width: "400px" }}
         >
-          <h1 className="text-center text-2xl">SIGN Up</h1>
+          <h1 className="text-center text-2xl">SIGN UP</h1>
           <TextField
+            error={errorFullName}
+            name="fullName"
             id="filled-basic"
-            label="FullName"
+            label={errorFullName ? errorFullName : "FullName"}
             variant="filled"
             size="small"
             fullWidth
           />
           <TextField
+            error={errorEmail}
+            name="email"
             id="filled-basic"
-            label="Email"
+            label={errorEmail ? errorEmail : "Email"}
             variant="filled"
             size="small"
             fullWidth
           />
           <TextField
+            error={errorPassword}
+            name="password"
             id="filled-basic"
-            label="Password"
+            label={errorPassword ? errorPassword : "Password"}
+            variant="filled"
+            size="small"
+            type="password"
+            fullWidth
+          />
+          <TextField
+            error={errorPassword}
+            name="confirmPassword"
+            id="filled-basic"
+            label={errorPassword ? errorPassword : "Confirm Password"}
             variant="filled"
             size="small"
             type="password"
@@ -58,7 +125,7 @@ function UserRegister() {
             </span>
             <span className="hover:underline hover:cursor-pointer hover:text-blue-500"></span>
           </div>
-          <Button variant="contained" fullWidth>
+          <Button type="submit" variant="contained" fullWidth>
             SIGN UP
           </Button>
         </form>

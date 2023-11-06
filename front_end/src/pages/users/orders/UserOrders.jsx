@@ -24,7 +24,7 @@ function UserOrders() {
       <div className="body">
         <div className="filter w-full flex justify-end">
           <div className="w-52 py-5">
-            <FormControl fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel id="demo-simple-select-label">Filter</InputLabel>
               <Select
                 labelId="demo-simple-select-label"

@@ -4,6 +4,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import InputLabel from "@mui/material/InputLabel";
 import ItemProduct from "./item/ItemProduct";
 import MenuItem from "@mui/material/MenuItem";
+import Pagination from "@mui/material/Pagination";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
@@ -114,11 +115,18 @@ function Products() {
           </div>
         </div>
         {/* handle show products */}
-        <div className="flex-1 py-20 px-10 flex justify-between gap-x-5 gap-y-20 flex-wrap">
-          <ItemProduct />
-          <ItemProduct />
-          <ItemProduct />
-          <ItemProduct />
+        <div className="flex-1 pt-20 px-3">
+          <div className=" flex gap-x-5 gap-y-20 flex-wrap">
+            <ItemProduct />
+            <ItemProduct />
+            <ItemProduct />
+            <ItemProduct />
+            <ItemProduct />
+            <ItemProduct />
+          </div>
+          <div className="pagination py-10 flex justify-end">
+            <Pagination count={10} color="primary" />
+          </div>
         </div>
       </main>
     </div>
