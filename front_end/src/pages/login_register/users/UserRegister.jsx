@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { post_register } from "../../../thunk/authThunk";
+import { post_register } from "../../../redux/thunk/authThunk";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { validateBlank } from "../../../utils/ValidateForm";
@@ -81,7 +81,6 @@ function UserRegister() {
           <TextField
             error={errorFullName}
             name="fullName"
-            id="filled-basic"
             label={errorFullName ? errorFullName : "FullName"}
             variant="filled"
             size="small"
@@ -90,7 +89,6 @@ function UserRegister() {
           <TextField
             error={errorEmail}
             name="email"
-            id="filled-basic"
             label={errorEmail ? errorEmail : "Email"}
             variant="filled"
             size="small"
@@ -99,7 +97,6 @@ function UserRegister() {
           <TextField
             error={errorPassword}
             name="password"
-            id="filled-basic"
             label={errorPassword ? errorPassword : "Password"}
             variant="filled"
             size="small"
@@ -109,7 +106,6 @@ function UserRegister() {
           <TextField
             error={errorPassword}
             name="confirmPassword"
-            id="filled-basic"
             label={errorPassword ? errorPassword : "Confirm Password"}
             variant="filled"
             size="small"

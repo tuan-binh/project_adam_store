@@ -7,6 +7,7 @@ import back_end.service.ICouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,16 +31,19 @@ public class CouponController {
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<CouponResponse> addNewCoupon(@RequestBody CouponRequest couponRequest) {
 		return new ResponseEntity<>(couponService.save(couponRequest),HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{couponId}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest couponRequest,@PathVariable Long couponId) {
 		return new ResponseEntity<>(couponService.update(couponRequest,couponId),HttpStatus.OK);
 	}
 	
 	@PutMapping("/{couponId}/status")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<CouponResponse> changeStatus(@PathVariable Long couponId) throws CustomException {
 		return new ResponseEntity<>(couponService.changeStatusCoupon(couponId),HttpStatus.OK);
 	}

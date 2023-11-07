@@ -5,13 +5,18 @@ import back_end.dto.request.ProductUpdateRequest;
 import back_end.dto.response.ImageResponse;
 import back_end.dto.response.ProductResponse;
 import back_end.exception.CustomException;
+import back_end.model.Color;
 import back_end.model.Product;
-import back_end.repository.ICategoryRepository;
-import back_end.repository.IImageProductRepository;
-import back_end.repository.IProductDetailRepository;
+import back_end.model.ProductDetail;
+import back_end.model.Size;
+import back_end.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,6 +28,10 @@ public class ProductMapper implements IGenericMapper<Product, ProductRequest, Pr
 	private IImageProductRepository iImageProductRepository;
 	@Autowired
 	private IProductDetailRepository productDetailRepository;
+	@Autowired
+	private IColorRepository colorRepository;
+	@Autowired
+	private ISizeRepository sizeRepository;
 	@Autowired
 	private ProductDetailMapper productDetailMapper;
 	
@@ -55,9 +64,30 @@ public class ProductMapper implements IGenericMapper<Product, ProductRequest, Pr
 				  .image(product.getImage())
 				  .bought(product.getBought())
 				  .category(product.getCategory())
+				  .colors(getListColorByProductId(product.getId()))
+				  .sizes(getListSizeByProductId(product.getId()))
 				  .imageResponses(iImageProductRepository.findAllByProductId(product.getId()).stream().map(item -> ImageResponse.builder().id(item.getId()).url(item.getUrl()).build()).collect(Collectors.toList()))
 				  .productDetailResponses(productDetailRepository.findAllByProductId(product.getId()).stream().map(item -> productDetailMapper.toResponse(item)).collect(Collectors.toList()))
 				  .status(product.isStatus())
 				  .build();
 	}
+	
+	public List<Color> getListColorByProductId(Long productId) {
+		List<ProductDetail> list = productDetailRepository.findAllByProductId(productId);
+		Set<Color> colors = new HashSet<>();
+		for (ProductDetail pd:list) {
+			colors.add(pd.getColor());
+		}
+		return new ArrayList<>(colors);
+	}
+	
+	public List<Size> getListSizeByProductId(Long productId) {
+		List<ProductDetail> list = productDetailRepository.findAllByProductId(productId);
+		Set<Size> sizes = new HashSet<>();
+		for (ProductDetail pd:list) {
+			sizes.add(pd.getSize());
+		}
+		return new ArrayList<>(sizes);
+	}
+	
 }

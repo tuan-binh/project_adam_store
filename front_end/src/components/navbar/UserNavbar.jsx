@@ -16,7 +16,7 @@ import Person4Icon from "@mui/icons-material/Person4";
 import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Tooltip from "@mui/material/Tooltip";
-import { handle_logout } from "../../thunk/authThunk";
+import { handle_logout } from "../../redux/thunk/authThunk";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 

@@ -1,6 +1,8 @@
 package back_end.dto.response;
 
 import back_end.model.Category;
+import back_end.model.Color;
+import back_end.model.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +23,8 @@ public class ProductResponse {
 	private String image;
 	private int bought;
 	private Category category;
+	private List<Color> colors;
+	private List<Size> sizes;
 	private List<ImageResponse> imageResponses;
 	private List<ProductDetailResponse> productDetailResponses;
 	private boolean status;

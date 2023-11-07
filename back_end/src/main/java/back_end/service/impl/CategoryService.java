@@ -23,10 +23,12 @@ public class CategoryService implements ICategoryService {
 	private CategoryMapper categoryMapper;
 	
 	@Override
-	public List<CategoryResponse> findAll() {
-		return categoryRepository.findAll().stream()
+	public List<CategoryResponse> findAll(Optional<String> search) {
+		return search.map(s -> categoryRepository.findAllByCategoryNameContainingIgnoreCase(s).stream()
 				  .map(item -> categoryMapper.toResponse(item))
-				  .collect(Collectors.toList());
+				  .collect(Collectors.toList())).orElseGet(() -> categoryRepository.findAll().stream()
+				  .map(item -> categoryMapper.toResponse(item))
+				  .collect(Collectors.toList()));
 	}
 	
 	@Override
@@ -36,7 +38,10 @@ public class CategoryService implements ICategoryService {
 	}
 	
 	@Override
-	public CategoryResponse save(CategoryRequest categoryRequest) {
+	public CategoryResponse save(CategoryRequest categoryRequest) throws CustomException {
+		if(categoryRepository.existsByCategoryName(categoryRequest.getCategoryName())) {
+			throw new CustomException("categoryName is exists");
+		}
 		return categoryMapper.toResponse(categoryRepository.save(categoryMapper.toEntity(categoryRequest)));
 	}
 	

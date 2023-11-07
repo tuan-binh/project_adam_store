@@ -1,5 +1,5 @@
 import { POST_LOGIN, POST_REGISTER } from "../api/service/authService";
-import { resetUser, setUser } from "../redux/reducers/AuthSlice";
+import { resetUser, setUser } from "../reducers/AuthSlice";
 
 import { Cookies } from "react-cookie";
 

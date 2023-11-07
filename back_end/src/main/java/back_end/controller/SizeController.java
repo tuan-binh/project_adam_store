@@ -7,6 +7,7 @@ import back_end.service.ISizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,16 +31,19 @@ public class SizeController {
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<SizeResponse> addNewSize(@RequestBody SizeRequest sizeRequest) {
 		return new ResponseEntity<>(sizeService.save(sizeRequest),HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{sizeId}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<SizeResponse> updateSize(@RequestBody SizeRequest sizeRequest,@PathVariable Long sizeId) {
 		return new ResponseEntity<>(sizeService.update(sizeRequest,sizeId),HttpStatus.OK);
 	}
 	
 	@PutMapping("/{sizeId}/status")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<SizeResponse> changeStatusSize(@PathVariable Long sizeId) throws CustomException {
 		return new ResponseEntity<>(sizeService.changeStatusSize(sizeId),HttpStatus.OK);
 	}

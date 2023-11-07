@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import ForgetPassword from "../../../components/modal/ForgetPassword";
 import TextField from "@mui/material/TextField";
-import { post_login } from "../../../thunk/authThunk";
+import { post_login } from "../../../redux/thunk/authThunk";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { validateBlank } from "../../../utils/ValidateForm";
@@ -85,7 +85,6 @@ function UserLogin() {
             <TextField
               error={errorEmail}
               name="email"
-              id="filled-basic"
               label={errorEmail ? errorEmail : "Email"}
               variant="filled"
               size="small"
@@ -94,7 +93,6 @@ function UserLogin() {
             <TextField
               error={errorPassword}
               name="password"
-              id="filled-basic"
               label={errorPassword ? errorPassword : "Password"}
               variant="filled"
               size="small"
