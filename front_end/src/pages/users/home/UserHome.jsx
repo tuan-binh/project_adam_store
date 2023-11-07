@@ -1,12 +1,26 @@
+import { useDispatch, useSelector } from "react-redux";
+
 import Banner from "../../../components/banner/Banner";
 import Button from "@mui/material/Button";
+import { CATEGORY } from "../../../redux/selectors/selectors";
+import { GET_ALL_CATEGORY } from "../../../redux/api/service/categoryService";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import UserReviews from "../../../components/user_reviews/UserReviews";
+import { useEffect } from "react";
 
 function UserHome() {
+  const dispatch = useDispatch();
+
+  const categories = useSelector(CATEGORY);
+
+  useEffect(() => {
+    dispatch(GET_ALL_CATEGORY(""));
+  }, []);
+
   return (
     <div>
+      {console.log(categories)}
       <Banner title={"ADAM STORE"} />
       <main className="mx-48 my-20">
         {/* search */}
@@ -43,7 +57,24 @@ function UserHome() {
             <div className="flex-1 py-5">
               {/* content category */}
               <div className="grid grid-cols-3 gap-4">
-                <div
+                {categories.status !== "pending" &&
+                  categories.categories.map((item) => {
+                    if (item.status) {
+                      return (
+                        <div
+                          key={item.id}
+                          className="h-40 relative rounded-lg bg-fixed bg-no-repeat bg-cover bg-center"
+                          style={{ backgroundImage: 'url("banner.webp")' }}
+                        >
+                          <div className="absolute bottom-2 right-4 text-4xl font-semibold text-white hover:cursor-pointer hover:underline transition-all">
+                            {item.categoryName}
+                          </div>
+                        </div>
+                      );
+                    }
+                  })}
+
+                {/* <div
                   className="h-40 relative rounded-lg bg-fixed bg-no-repeat bg-cover bg-center"
                   style={{ backgroundImage: 'url("banner.webp")' }}
                 >
@@ -66,15 +97,7 @@ function UserHome() {
                   <div className="absolute bottom-2 right-4 text-4xl font-semibold text-white hover:cursor-pointer hover:underline transition-all">
                     NỘI DUNG
                   </div>
-                </div>
-                <div
-                  className="h-40 relative rounded-lg bg-fixed bg-no-repeat bg-cover bg-center"
-                  style={{ backgroundImage: 'url("banner.webp")' }}
-                >
-                  <div className="absolute bottom-2 right-4 text-4xl font-semibold text-white hover:cursor-pointer hover:underline transition-all">
-                    NỘI DUNG
-                  </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="relative">

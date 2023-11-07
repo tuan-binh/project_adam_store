@@ -1,6 +1,11 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
 import Banner from "../../../components/banner/Banner";
+import { CATEGORY } from "../../../redux/selectors/selectors";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { GET_ALL_CATEGORY } from "../../../redux/api/service/categoryService";
 import InputLabel from "@mui/material/InputLabel";
 import ItemProduct from "./item/ItemProduct";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,9 +14,11 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
 
 function Products() {
+  const dispatch = useDispatch();
+  const categories = useSelector(CATEGORY);
+
   // handle filter by price
   const [priceValue, setPriceValue] = useState("ALL");
   const handleChangePriceValue = (event) => {
@@ -23,6 +30,10 @@ function Products() {
   const handleChangeCategoryValue = (event) => {
     setCategoryValue(event.target.value);
   };
+
+  useEffect(() => {
+    dispatch(GET_ALL_CATEGORY(""));
+  }, []);
 
   return (
     <div>
@@ -61,9 +72,16 @@ function Products() {
                     onChange={handleChangeCategoryValue}
                   >
                     <MenuItem value={"ALL"}>ALL</MenuItem>
-                    <MenuItem value={"QUẦN"}>PANTS</MenuItem>
-                    <MenuItem value={"SUIT"}>SUIT</MenuItem>
-                    <MenuItem value={"SHOE"}>SHOE</MenuItem>
+                    {categories.status !== "pending" &&
+                      categories.categories.map((item) => {
+                        if (item.status) {
+                          return (
+                            <MenuItem key={item.id} value={item.id}>
+                              {item.categoryName}
+                            </MenuItem>
+                          );
+                        }
+                      })}
                   </Select>
                 </FormControl>
               </div>
