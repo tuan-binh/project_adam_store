@@ -10,7 +10,7 @@ public class ColorMapper implements IGenericMapper<Color, ColorRequest, ColorRes
 	@Override
 	public Color toEntity(ColorRequest colorRequest) {
 		return Color.builder()
-				  .colorName(colorRequest.getColorName())
+				  .colorName(colorRequest.getColorName().toUpperCase())
 				  .status(colorRequest.isStatus())
 				  .build();
 	}

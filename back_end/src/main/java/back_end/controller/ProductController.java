@@ -93,11 +93,11 @@ public class ProductController {
 		return new ResponseEntity<>(productService.updateProductDetailInProduct(productDetailRequest, productDetailId, productId), HttpStatus.OK);
 	}
 	
-//	// chức năng thay
-//	@PutMapping("/{productDetailId}/in/{productId}/status")
-//	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
-//	public ResponseEntity<ProductResponse> changeStatusProductDetail(@PathVariable Long productDetailId, @PathVariable long productId) throws CustomException {
-//		return new ResponseEntity<>(productService.changeStatusProductDetail(productDetailId, productId), HttpStatus.OK);
-//	}
+//	// chức năng thay đổi trạng thái sản phẩm chi tiết ( true or false )
+	@PutMapping("/{productDetailId}/in/{productId}/status")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
+	public ResponseEntity<ProductResponse> changeStatusProductDetail(@PathVariable Long productDetailId, @PathVariable long productId) throws CustomException {
+		return new ResponseEntity<>(productService.changeStatusProductDetail(productDetailId, productId), HttpStatus.OK);
+	}
 	
 }

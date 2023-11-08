@@ -10,7 +10,7 @@ public class SizeMapper implements IGenericMapper<Size, SizeRequest, SizeRespons
 	@Override
 	public Size toEntity(SizeRequest sizeRequest) {
 		return Size.builder()
-				  .sizeName(sizeRequest.getSizeName())
+				  .sizeName(sizeRequest.getSizeName().toUpperCase())
 				  .status(sizeRequest.isStatus())
 				  .build();
 	}

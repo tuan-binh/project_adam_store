@@ -10,9 +10,11 @@ import Favourite from "../users/favourite/Favourite";
 import IndexAdminHome from "../admin/IndexAdminHome";
 import IndexUserHome from "../users/IndexUserHome";
 import ManageCategory from "../admin/products/ManageCategory";
+import ManageColor from "../admin/products/ManageColor";
 import ManageCoupon from "../admin/coupon/ManageCoupon";
 import ManageOrders from "../admin/orders/ManageOrders";
 import ManageProduct from "../admin/products/ManageProduct";
+import ManageSize from "../admin/products/ManageSize";
 import ProductDetail from "../users/products/detail/ProductDetail";
 import Products from "../users/products/Products";
 import RevenueOrders from "../admin/revenue/RevenueOrders";
@@ -59,6 +61,8 @@ function Routers() {
         {/* products */}
         <Route path="/admin/category" Component={ManageCategory}></Route>
         <Route path="/admin/product" Component={ManageProduct}></Route>
+        <Route path="/admin/color" Component={ManageColor}></Route>
+        <Route path="/admin/size" Component={ManageSize}></Route>
         {/* coupon */}
         <Route path="/admin/coupon" Component={ManageCoupon}></Route>
         {/* revenue */}
