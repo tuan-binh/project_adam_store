@@ -41,9 +41,9 @@ public class ProductService implements IProductService {
 	private ProductDetailMapper productDetailMapper;
 	
 	@Override
-	public Page<ProductResponse> findAll(Pageable pageable) {
-		List<ProductResponse> productResponses = productRepository.findAll(pageable).stream().map(item -> productMapper.toResponse(item)).collect(Collectors.toList());
-		return new PageImpl<>(productResponses, pageable, productResponses.size());
+	public Page<ProductResponse> findAll(Pageable pageable,String category,String search) {
+		Page<Product> productResponses = productRepository.findAll(pageable);
+		return productResponses.map(item -> productMapper.toResponse(item));
 	}
 	
 	@Override

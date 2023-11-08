@@ -64,7 +64,7 @@ function AdminNavbar() {
         sx={{
           marginTop: "10px",
           ".MuiList-root": {
-            width: "150px",
+            width: "130px",
             padding: "0",
           },
         }}

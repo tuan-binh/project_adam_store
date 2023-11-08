@@ -48,7 +48,7 @@ public class ProductMapper implements IGenericMapper<Product, ProductRequest, Pr
 	
 	public Product toEntity(ProductUpdateRequest productUpdateRequest) throws CustomException {
 		return Product.builder()
-				  .productName(productUpdateRequest.getProductName())
+				  .productName(productUpdateRequest.getProductName().toUpperCase())
 				  .description(productUpdateRequest.getDescription())
 				  .category(categoryRepository.findById(productUpdateRequest.getCategoryId()).orElseThrow(()->new CustomException("category not found")))
 				  .status(productUpdateRequest.isStatus())

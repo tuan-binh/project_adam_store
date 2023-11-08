@@ -10,8 +10,8 @@ public class CouponMapper implements IGenericMapper<Coupon, CouponRequest, Coupo
 	@Override
 	public Coupon toEntity(CouponRequest couponRequest) {
 		return Coupon.builder()
-				  .coupon(couponRequest.getCoupon())
-				  .percent(couponRequest.getPercent())
+				  .coupon(couponRequest.getCoupon().toUpperCase())
+				  .percent(couponRequest.getPercent() / 100)
 				  .startDate(couponRequest.getStartDate())
 				  .endDate(couponRequest.getEndDate())
 				  .stock(couponRequest.getStock())
@@ -24,7 +24,7 @@ public class CouponMapper implements IGenericMapper<Coupon, CouponRequest, Coupo
 		return CouponResponse.builder()
 				  .id(coupon.getId())
 				  .coupon(coupon.getCoupon())
-				  .percent(coupon.getPercent())
+				  .percent(coupon.getPercent() * 100)
 				  .startDate(coupon.getStartDate())
 				  .endDate(coupon.getEndDate())
 				  .stock(coupon.getStock())

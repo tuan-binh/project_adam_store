@@ -23,10 +23,12 @@ public class CouponService implements ICouponService {
 	private CouponMapper couponMapper;
 	
 	@Override
-	public List<CouponResponse> findAll() {
-		return couponRepository.findAll().stream()
+	public List<CouponResponse> findAll(Optional<String> search) {
+		return search.map(s -> couponRepository.findAllByCouponContainingIgnoreCase(s).stream()
 				  .map(item -> couponMapper.toResponse(item))
-				  .collect(Collectors.toList());
+				  .collect(Collectors.toList())).orElseGet(() -> couponRepository.findAll().stream()
+				  .map(item -> couponMapper.toResponse(item))
+				  .collect(Collectors.toList()));
 	}
 	
 	@Override
@@ -36,14 +38,23 @@ public class CouponService implements ICouponService {
 	}
 	
 	@Override
-	public CouponResponse save(CouponRequest couponRequest) {
+	public CouponResponse save(CouponRequest couponRequest) throws CustomException {
+		if(couponRepository.existsByCoupon(couponRequest.getCoupon())) {
+			throw new CustomException("coupon name is exists");
+		}
 		return couponMapper.toResponse(couponRepository.save(couponMapper.toEntity(couponRequest)));
 	}
 	
 	@Override
-	public CouponResponse update(CouponRequest couponRequest, Long id) {
+	public CouponResponse update(CouponRequest couponRequest, Long id) throws CustomException {
 		Coupon coupon = couponMapper.toEntity(couponRequest);
 		coupon.setId(id);
+		if(couponRequest.getCoupon().equals(couponRepository.findById(id).orElseThrow(()->new CustomException("coupon not found")).getCoupon())) {
+			return couponMapper.toResponse(couponRepository.save(coupon));
+		}
+		if(couponRepository.existsByCoupon(coupon.getCoupon())) {
+			throw new CustomException("coupon name is exists");
+		}
 		return couponMapper.toResponse(couponRepository.save(coupon));
 	}
 	

@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface ICategoryRepository extends JpaRepository<Category,Long> {
 	
-	boolean existsByCategoryName(String categoryName);
+	boolean existsByCategoryNameIgnoreCase(String categoryName);
 	
 	List<Category> findAllByCategoryNameContainingIgnoreCase(String categoryName);
 	

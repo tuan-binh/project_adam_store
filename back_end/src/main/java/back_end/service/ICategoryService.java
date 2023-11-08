@@ -11,6 +11,6 @@ public interface ICategoryService {
 	List<CategoryResponse> findAll(Optional<String> search);
 	CategoryResponse findById(Long id) throws CustomException;
 	CategoryResponse save(CategoryRequest categoryRequest) throws CustomException;
-	CategoryResponse update(CategoryRequest categoryRequest,Long id);
+	CategoryResponse update(CategoryRequest categoryRequest,Long id) throws CustomException;
 	CategoryResponse changeStatusCategory(Long id) throws CustomException;
 }

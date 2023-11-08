@@ -73,31 +73,6 @@ function UserHome() {
                       );
                     }
                   })}
-
-                {/* <div
-                  className="h-40 relative rounded-lg bg-fixed bg-no-repeat bg-cover bg-center"
-                  style={{ backgroundImage: 'url("banner.webp")' }}
-                >
-                  <div className="absolute bottom-2 right-4 text-4xl font-semibold text-white hover:cursor-pointer hover:underline transition-all">
-                    NỘI DUNG
-                  </div>
-                </div>
-                <div
-                  className="h-40 relative rounded-lg bg-fixed bg-no-repeat bg-cover bg-center"
-                  style={{ backgroundImage: 'url("banner.webp")' }}
-                >
-                  <div className="absolute bottom-2 right-4 text-4xl font-semibold text-white hover:cursor-pointer hover:underline transition-all">
-                    NỘI DUNG
-                  </div>
-                </div>
-                <div
-                  className="h-40 relative rounded-lg bg-fixed bg-no-repeat bg-cover bg-center"
-                  style={{ backgroundImage: 'url("banner.webp")' }}
-                >
-                  <div className="absolute bottom-2 right-4 text-4xl font-semibold text-white hover:cursor-pointer hover:underline transition-all">
-                    NỘI DUNG
-                  </div>
-                </div> */}
               </div>
             </div>
             <div className="relative">

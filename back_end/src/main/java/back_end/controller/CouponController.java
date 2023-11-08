@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/coupon")
@@ -21,8 +22,8 @@ public class CouponController {
 	private ICouponService couponService;
 	
 	@GetMapping
-	public ResponseEntity<List<CouponResponse>> getAllCoupon() {
-		return new ResponseEntity<>(couponService.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<CouponResponse>> getAllCoupon(@RequestParam(defaultValue = "")Optional<String> search) {
+		return new ResponseEntity<>(couponService.findAll(search), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{couponId}")
@@ -32,13 +33,13 @@ public class CouponController {
 	
 	@PostMapping
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public ResponseEntity<CouponResponse> addNewCoupon(@RequestBody CouponRequest couponRequest) {
+	public ResponseEntity<CouponResponse> addNewCoupon(@RequestBody CouponRequest couponRequest) throws CustomException {
 		return new ResponseEntity<>(couponService.save(couponRequest),HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{couponId}")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest couponRequest,@PathVariable Long couponId) {
+	public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest couponRequest,@PathVariable Long couponId) throws CustomException {
 		return new ResponseEntity<>(couponService.update(couponRequest,couponId),HttpStatus.OK);
 	}
 	

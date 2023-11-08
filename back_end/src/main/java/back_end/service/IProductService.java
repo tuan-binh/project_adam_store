@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface IProductService {
 	
-	Page<ProductResponse> findAll(Pageable pageable);
+	Page<ProductResponse> findAll(Pageable pageable,String category,String search);
 	
 	ProductResponse findById(Long id) throws CustomException;
 	

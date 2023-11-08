@@ -11,8 +11,27 @@ const categorySlice = createSlice({
     updateCategory: (state, action) => {
       state.categories = state.categories.map((item) => {
         if (item.id === action.payload.id) {
-          item = action.payload;
+          return (item = action.payload);
+        } else {
+          return item;
         }
+      });
+    },
+    enableEditItem: (state, action) => {
+      state.categories = state.categories.map((item) => {
+        if (item.id === action.payload) {
+          item.isEdit = true;
+          return item;
+        } else {
+          item.isEdit = false;
+          return item;
+        }
+      });
+    },
+    disabledEditItem: (state) => {
+      state.categories = state.categories.map((item) => {
+        item.isEdit = false;
+        return item;
       });
     },
   },
@@ -22,10 +41,18 @@ const categorySlice = createSlice({
     });
     builder.addCase(GET_ALL_CATEGORY.fulfilled, (state, action) => {
       state.status = "";
-      state.categories = action.payload;
+      state.categories = action.payload.map((item) => ({
+        ...item,
+        isEdit: false,
+      }));
     });
   },
 });
 
-export const { addNewCategory, updateCategory } = categorySlice.actions;
+export const {
+  addNewCategory,
+  updateCategory,
+  enableEditItem,
+  disabledEditItem,
+} = categorySlice.actions;
 export default categorySlice.reducer;

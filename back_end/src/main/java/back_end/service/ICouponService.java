@@ -5,13 +5,14 @@ import back_end.dto.response.CouponResponse;
 import back_end.exception.CustomException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ICouponService {
 	
-	List<CouponResponse> findAll();
+	List<CouponResponse> findAll(Optional<String> search);
 	CouponResponse findById(Long id) throws CustomException;
-	CouponResponse save(CouponRequest couponRequest);
-	CouponResponse update(CouponRequest couponRequest,Long id);
+	CouponResponse save(CouponRequest couponRequest) throws CustomException;
+	CouponResponse update(CouponRequest couponRequest,Long id) throws CustomException;
 	CouponResponse changeStatusCoupon(Long id) throws CustomException;
 	
 }

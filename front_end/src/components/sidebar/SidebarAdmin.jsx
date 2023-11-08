@@ -21,7 +21,7 @@ function SidebarAdmin({ toggle, handleToggleNavbar, expanded, handleChange }) {
     {
       id: 1,
       icon: <DescriptionOutlinedIcon className="nav_icon" />,
-      subMenu: [{ id: 1, path: "/admin/bills", text: "Orders" }],
+      subMenu: [{ id: 1, path: "/admin/orders", text: "Orders" }],
       text: "Orders",
     },
     {
@@ -30,29 +30,29 @@ function SidebarAdmin({ toggle, handleToggleNavbar, expanded, handleChange }) {
       subMenu: [
         { id: 1, path: "/admin/category", text: "Categories" },
         { id: 2, path: "/admin/product", text: "Products" },
+        { id: 3, path: "/admin/color", text: "Colors" },
+        { id: 4, path: "/admin/size", text: "Sizes" },
       ],
       text: "Products",
     },
     {
       id: 3,
       icon: <LocalActivityIcon className="nav_icon" />,
-      subMenu: [{ id: 1, path: "/admin/shipper", text: "Coupons" }],
+      subMenu: [{ id: 1, path: "/admin/coupon", text: "Coupons" }],
       text: "Coupon",
     },
     {
       id: 4,
       icon: <BarChartOutlinedIcon className="nav_icon" />,
       subMenu: [
-        { id: 1, path: "/admin/reports/inventory", text: "REvenue Orders" },
-        { id: 1, path: "/admin/reports/inventory", text: "REvenue Products" },
+        { id: 1, path: "/admin/revenue/orders", text: "Revenue Orders" },
+        { id: 1, path: "/admin/revenue/products", text: "Revenue Products" },
       ],
       text: "Revenue",
     },
   ];
 
-  const [active, setActive] = useState(
-    JSON.parse(localStorage.getItem("active"))
-  );
+  const [active, setActive] = useState(localStorage.getItem("active"));
 
   const handleActiveSideBar = (text) => {
     setActive(text);

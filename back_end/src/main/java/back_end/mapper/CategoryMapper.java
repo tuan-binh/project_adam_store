@@ -10,7 +10,7 @@ public class CategoryMapper implements IGenericMapper<Category, CategoryRequest,
 	@Override
 	public Category toEntity(CategoryRequest categoryRequest) {
 		return Category.builder()
-				  .categoryName(categoryRequest.getCategoryName())
+				  .categoryName(categoryRequest.getCategoryName().toUpperCase())
 				  .status(categoryRequest.isStatus())
 				  .build();
 	}
@@ -19,7 +19,7 @@ public class CategoryMapper implements IGenericMapper<Category, CategoryRequest,
 	public CategoryResponse toResponse(Category category) {
 		return CategoryResponse.builder()
 				  .id(category.getId())
-				  .categoryName(category.getCategoryName())
+				  .categoryName(category.getCategoryName().toUpperCase())
 				  .status(category.isStatus())
 				  .build();
 	}

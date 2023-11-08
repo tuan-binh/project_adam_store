@@ -39,7 +39,7 @@ public class CategoryController {
 	
 	@PutMapping("/{categoryId}")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest categoryRequest, @PathVariable Long categoryId) {
+	public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest categoryRequest, @PathVariable Long categoryId) throws CustomException {
 		return new ResponseEntity<>(categoryService.update(categoryRequest,categoryId),HttpStatus.OK);
 	}
 	
