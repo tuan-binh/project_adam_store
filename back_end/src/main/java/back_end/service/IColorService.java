@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface IColorService {
 	
-	List<ColorResponse> findAll();
+	List<ColorResponse> findAll(String search);
 	
 	ColorResponse findById(Long id) throws CustomException;
 	
-	ColorResponse save(ColorRequest colorRequest);
+	ColorResponse save(ColorRequest colorRequest) throws CustomException;
 	
-	ColorResponse update(ColorRequest colorRequest,Long id);
+	ColorResponse update(ColorRequest colorRequest,Long id) throws CustomException;
 	
 	ColorResponse changeStatusColor(Long id) throws CustomException;
 	

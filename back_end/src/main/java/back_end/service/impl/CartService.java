@@ -31,6 +31,7 @@ public class CartService implements ICartService {
 	@Autowired
 	private OrderMapper orderMapper;
 	
+	// chức năng thêm sản phẩm thêm sản phẩm chi tiết vào giỏ hàng
 	@Override
 	public CartItemResponse addProductToCart(Long productDeailId, Authentication authentication) throws CustomException {
 		// lấy đối tượng user đã đăng nhập ở đối tượng authentication
@@ -66,6 +67,7 @@ public class CartService implements ICartService {
 		return orderMapper.toCartItem(orderDetailRepository.save(OrderDetail.builder().quantity(1).orders(orders).productDetail(productDetail).build()));
 	}
 	
+	// chức năng thay đổi số lượng của cartItem trong giỏ hàng
 	@Override
 	public CartItemResponse changeQuantityInCart(Long cartItemId, int quantity, Authentication authentication) throws CustomException {
 		// lấy đối tượng user đã đăng nhập ở đối tượng authentication
@@ -80,6 +82,7 @@ public class CartService implements ICartService {
 		throw new CustomException("cart item is not yours");
 	}
 	
+	// chức năng xóa cartItem trong giỏ hàng
 	@Override
 	public CartItemResponse removeCartItemInCart(Long cartItemId, Authentication authentication) throws CustomException {
 		// lấy đối tượng user đã đăng nhập ở đối tượng authentication
@@ -94,6 +97,7 @@ public class CartService implements ICartService {
 		throw new CustomException("cart item is not yours");
 	}
 	
+	// chức năng xóa hết tất cả sản phẩm trong giỏ hàng
 	@Override
 	public List<CartItemResponse> clearCartUser(Authentication authentication) throws CustomException {
 		// lấy đối tượng user đã đăng nhập ở đối tượng authentication

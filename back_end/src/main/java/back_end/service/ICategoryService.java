@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ICategoryService {
-	List<CategoryResponse> findAll(Optional<String> search);
+	List<CategoryResponse> findAll(String search);
 	CategoryResponse findById(Long id) throws CustomException;
 	CategoryResponse save(CategoryRequest categoryRequest) throws CustomException;
 	CategoryResponse update(CategoryRequest categoryRequest,Long id) throws CustomException;

@@ -17,6 +17,7 @@ public class RoleService implements IRoleService {
 	
 	@Override
 	public Roles findByRoleName(RoleName roleName) {
+		// tìm kiếm role theo roleName kiểu dữ liệu Enum
 		Optional<Roles> optionalRoles = roleRepository.findByRoleName(roleName);
 		return optionalRoles.orElseThrow(() -> new RuntimeException("role not found"));
 	}

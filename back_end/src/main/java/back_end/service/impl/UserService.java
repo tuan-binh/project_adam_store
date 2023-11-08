@@ -54,38 +54,44 @@ public class UserService implements IUserService {
 	@Autowired
 	private UserMapper userMapper;
 	
+	// login
 	@Override
 	public JwtResponse login(HttpSession session, UserLogin userLogin) throws CustomException {
 		Authentication authentication;
 		try {
+			// Thực hiện xác thực người dùng thông qua UsernamePasswordAuthenticationToken
 			authentication = authenticationManager.authenticate(
 					  new UsernamePasswordAuthenticationToken(userLogin.getEmail(), userLogin.getPassword())
 			);
 		} catch (AuthenticationException e) {
+			// Xử lý khi xác thực thất bại, kiểm tra số lần nhập sai mật khẩu để quyết định khoá tài khoản
 			Integer count = (Integer) session.getAttribute("count");
 			if (count == null) {
-				// lần đầu tiền sai mat khau
+				// Lần đầu tiên nhập sai mật khẩu
 				session.setAttribute("count", 1);
 			} else {
-				// khong phai lan dau tien sai
+				// Không phải lần đầu tiên nhập sai
 				if (count == 3) {
-					// khoa tai khoan
+					// Khi số lần nhập sai đạt mức 3, khoá tài khoản
 					Users users = userRepository.findByEmail(userLogin.getEmail()).orElseThrow(() -> new CustomException("email not found"));
 					users.setStatus(false);
 					userRepository.save(users);
 					throw new CustomException("your account is blocked");
 				} else {
-					// thuc hien tang count
+					// Tăng số lần nhập sai
 					session.setAttribute("count", count + 1);
 				}
 			}
 			throw new CustomException("Username or Password is incorrect");
 		}
 		
+		// Lấy thông tin người dùng từ Principal và kiểm tra trạng thái tài khoản
 		UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
 		if (!userPrincipal.isStatus()) {
 			throw new CustomException("your account is blocked");
 		}
+		
+		// Tạo token JWT và trả về thông tin người dùng
 		String token = jwtProvider.generateToken(userPrincipal);
 		List<String> roles = userPrincipal.getAuthorities().stream()
 				  .map(GrantedAuthority::getAuthority)
@@ -102,16 +108,20 @@ public class UserService implements IUserService {
 				  .build();
 	}
 	
+	// register
 	@Override
 	public void register(UserRegister userRegister) throws CustomException {
+		// Kiểm tra xem email đã tồn tại chưa
 		if (userRepository.existsByEmail(userRegister.getEmail())) {
 			throw new CustomException("email is exists");
 		}
 		Set<Roles> roles = new HashSet<>();
-		// nếu không truyền lên quyền role sẽ mặc định là role user
+		
+		// Nếu không có quyền được truyền lên, mặc định là role user
 		if (userRegister.getRoles() == null || userRegister.getRoles().isEmpty()) {
 			roles.add(roleService.findByRoleName(RoleName.ROLE_USER));
 		} else {
+			// Xác định quyền dựa trên danh sách quyền được truyền lên
 			userRegister.getRoles().forEach(role -> {
 				switch (role) {
 					case "admin":
@@ -128,6 +138,8 @@ public class UserService implements IUserService {
 				}
 			});
 		}
+		
+		// Lưu người dùng mới vào cơ sở dữ liệu
 		userRepository.save(Users.builder()
 				  .fullName(userRegister.getFullName())
 				  .email(userRegister.getEmail())
@@ -137,17 +149,21 @@ public class UserService implements IUserService {
 				  .build());
 	}
 	
+	// chức năng lấy thông tin giỏ hàng của người dùng đang đăng nhập
 	@Override
 	public List<CartItemResponse> getCart(Authentication authentication) throws CustomException {
+		// Lấy thông tin người dùng từ Principal
 		UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
 		Optional<Orders> optionalOrders = orderRepository.findByUsersIdAndStatus(userPrincipal.getId(), false);
-		// trường họp có giỏ hàng thì sẽ trả về những sản phẩm trong giỏ hàng
+		
+		// Trường hợp có giỏ hàng, trả về danh sách sản phẩm trong giỏ hàng
 		if (optionalOrders.isPresent()) {
 			return orderDetailRepository.findAllByOrdersId(optionalOrders.get().getId()).stream()
 					  .map(item -> orderMapper.toCartItem(item))
 					  .collect(Collectors.toList());
 		}
-		// trường hợp không có giỏ hàng thì sẽ khởi tạo và trả về
+		
+		// Trường hợp không có giỏ hàng, khởi tạo giỏ hàng mới và trả về
 		Orders order = orderRepository.save(Orders.builder()
 				  .orderStatus(OrderStatus.PENDING)
 				  .users(userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new CustomException("user not found")))
@@ -158,39 +174,63 @@ public class UserService implements IUserService {
 				  .collect(Collectors.toList());
 	}
 	
+	// chức năng lấy thông tin danh sách yêu thích của người dùng đang đăng nhập
 	@Override
 	public List<Product> getFavourite(Authentication authentication) throws CustomException {
+		// Lấy thông tin người dùng từ Principal
 		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
 		Users users = userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found"));
+		
+		// Trả về danh sách sản phẩm yêu thích
 		return new ArrayList<>(users.getFavourite());
 	}
 	
+	// chức năng lấy thông tin danh sách thông tin orders của người dùng đang đăng nhập
 	@Override
 	public List<OrderResponse> getOrders(Authentication authentication) {
+		// Lấy thông tin người dùng từ Principal
 		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
+		
+		// Trả về danh sách đơn hàng của người dùng
 		return orderRepository.findAllByUsersIdAndStatus(userPrinciple.getId(), true).stream()
 				  .map(item -> orderMapper.toOrderResponse(item))
 				  .collect(Collectors.toList());
 	}
 	
+	// chức năng update thông tin người dùng đang đăng nhập
 	@Override
 	public UserResponse updateInformation(UserUpdate userUpdate, Authentication authentication) throws CustomException {
+		// Lấy thông tin người dùng từ Principal
 		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
 		Users users = userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found"));
+		// check xem số điện thoại có bị trùng ko nếu trùng sẽ ném ra ngoại lên CustomException
+		if(userRepository.existsByPhone(userUpdate.getPhone())) {
+			throw new CustomException("phone is exists");
+		}
+		// Cập nhật địa chỉ và số điện thoại của người dùng
 		users.setAddress(userUpdate.getAddress());
 		users.setPhone(userUpdate.getPhone());
+		
+		// Trả về thông tin người dùng sau khi cập nhật
 		return userMapper.toUserResponse(userRepository.save(users));
 	}
 	
+	// chức năng thay đổi mật khẩu của người dùng
 	@Override
 	public UserResponse changePassword(UserPassword userPassword, Authentication authentication) throws CustomException {
+		// Lấy thông tin người dùng từ Principal
 		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
 		Users users = userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found"));
+		
+		// Kiểm tra mật khẩu cũ có khớp hay không
 		if (passwordEncoder.matches(userPassword.getOldPassword(), users.getPassword())) {
+			// Nếu khớp, cập nhật mật khẩu mới và trả về thông tin người dùng
 			users.setPassword(passwordEncoder.encode(userPassword.getNewPassword()));
 		} else {
+			// Nếu không khớp, ném CustomException
 			throw new CustomException("old password not matches");
 		}
+		
 		return userMapper.toUserResponse(userRepository.save(users));
 	}
 }

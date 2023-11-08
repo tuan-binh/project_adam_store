@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ISizeService {
 	
-	List<SizeResponse> findAll();
+	List<SizeResponse> findAll(String search);
 	SizeResponse findById(Long id) throws CustomException;
-	SizeResponse save(SizeRequest sizeRequest);
-	SizeResponse update(SizeRequest sizeRequest,Long id);
+	SizeResponse save(SizeRequest sizeRequest) throws CustomException;
+	SizeResponse update(SizeRequest sizeRequest,Long id) throws CustomException;
 	SizeResponse changeStatusSize(Long id) throws CustomException;
 }

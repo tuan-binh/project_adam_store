@@ -10,3 +10,5 @@ export const GET_ALL_PRODUCT = createAsyncThunk(
     return response.data;
   }
 );
+
+export const POST_ADD_PRODUCT = async () => {};

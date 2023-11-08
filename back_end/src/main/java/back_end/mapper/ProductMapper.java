@@ -29,10 +29,6 @@ public class ProductMapper implements IGenericMapper<Product, ProductRequest, Pr
 	@Autowired
 	private IProductDetailRepository productDetailRepository;
 	@Autowired
-	private IColorRepository colorRepository;
-	@Autowired
-	private ISizeRepository sizeRepository;
-	@Autowired
 	private ProductDetailMapper productDetailMapper;
 	
 	@Override
@@ -41,7 +37,7 @@ public class ProductMapper implements IGenericMapper<Product, ProductRequest, Pr
 				  .productName(productRequest.getProductName())
 				  .description(productRequest.getDescription())
 				  .image(productRequest.getImages().get(0))
-				  .category(categoryRepository.findById(productRequest.getCategoryId()).orElseThrow(()->new CustomException("category not found")))
+				  .category(categoryRepository.findById(productRequest.getCategoryId()).orElseThrow(() -> new CustomException("category not found")))
 				  .status(productRequest.isStatus())
 				  .build();
 	}
@@ -50,7 +46,7 @@ public class ProductMapper implements IGenericMapper<Product, ProductRequest, Pr
 		return Product.builder()
 				  .productName(productUpdateRequest.getProductName().toUpperCase())
 				  .description(productUpdateRequest.getDescription())
-				  .category(categoryRepository.findById(productUpdateRequest.getCategoryId()).orElseThrow(()->new CustomException("category not found")))
+				  .category(categoryRepository.findById(productUpdateRequest.getCategoryId()).orElseThrow(() -> new CustomException("category not found")))
 				  .status(productUpdateRequest.isStatus())
 				  .build();
 	}
@@ -75,8 +71,10 @@ public class ProductMapper implements IGenericMapper<Product, ProductRequest, Pr
 	public List<Color> getListColorByProductId(Long productId) {
 		List<ProductDetail> list = productDetailRepository.findAllByProductId(productId);
 		Set<Color> colors = new HashSet<>();
-		for (ProductDetail pd:list) {
-			colors.add(pd.getColor());
+		for (ProductDetail pd : list) {
+			if (pd.isStatus()) {
+				colors.add(pd.getColor());
+			}
 		}
 		return new ArrayList<>(colors);
 	}
@@ -84,8 +82,10 @@ public class ProductMapper implements IGenericMapper<Product, ProductRequest, Pr
 	public List<Size> getListSizeByProductId(Long productId) {
 		List<ProductDetail> list = productDetailRepository.findAllByProductId(productId);
 		Set<Size> sizes = new HashSet<>();
-		for (ProductDetail pd:list) {
-			sizes.add(pd.getSize());
+		for (ProductDetail pd : list) {
+			if (pd.isStatus()) {
+				sizes.add(pd.getSize());
+			}
 		}
 		return new ArrayList<>(sizes);
 	}

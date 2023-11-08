@@ -22,33 +22,60 @@ public class CouponService implements ICouponService {
 	@Autowired
 	private CouponMapper couponMapper;
 	
+	// chức năng lấy tất cả thông tin phiếu giảm giá có trong hệ thống
 	@Override
-	public List<CouponResponse> findAll(Optional<String> search) {
-		return search.map(s -> couponRepository.findAllByCouponContainingIgnoreCase(s).stream()
-				  .map(item -> couponMapper.toResponse(item))
-				  .collect(Collectors.toList())).orElseGet(() -> couponRepository.findAll().stream()
-				  .map(item -> couponMapper.toResponse(item))
-				  .collect(Collectors.toList()));
+	public List<CouponResponse> findAll(String search) {
+		// Khai báo danh sách chứa đối tượng CouponResponse
+		List<CouponResponse> list;
+		
+		// Kiểm tra nếu tham số tìm kiếm trống
+		if(search.isEmpty()) {
+			// Nếu trống, lấy tất cả các Coupon từ repository và ánh xạ sang CouponResponse
+			list = couponRepository.findAll().stream()
+					  .map(item -> couponMapper.toResponse(item))
+					  .collect(Collectors.toList());
+		} else {
+			// Nếu không trống, lấy danh sách các Coupon có tên chứa giá trị của tham số tìm kiếm (không phân biệt chữ hoa chữ thường)
+			// và ánh xạ sang CouponResponse
+			list = couponRepository.findAllByCouponContainingIgnoreCase(search).stream()
+					  .map(item -> couponMapper.toResponse(item))
+					  .collect(Collectors.toList());
+		}
+		
+		// Trả về danh sách CouponResponse tùy thuộc vào giá trị của tham số tìm kiếm
+		return list;
 	}
 	
+	// chức năng lấy thông tin phiếu giảm giá theo id
 	@Override
 	public CouponResponse findById(Long id) throws CustomException {
+		// Tìm kiếm Coupon theo ID. Nếu tìm thấy, ánh xạ sang CouponResponse
+		// Nếu không tìm thấy, ném ngoại lệ tùy chỉnh thông báo rằng Coupon không được tìm thấy
 		Optional<Coupon> optionalCoupon = couponRepository.findById(id);
 		return optionalCoupon.map(item -> couponMapper.toResponse(item)).orElseThrow(()->new CustomException("coupon not found"));
 	}
 	
+	// chức năng thêm thông tin phiếu giảm giá mới vào hệ thống
 	@Override
 	public CouponResponse save(CouponRequest couponRequest) throws CustomException {
+		// Kiểm tra nếu đã tồn tại Coupon với tên tương ứng, ném ngoại lệ tùy chỉnh
+		// Ngược lại, ánh xạ Coupon từ CouponRequest, lưu và ánh xạ kết quả sang CouponResponse
 		if(couponRepository.existsByCoupon(couponRequest.getCoupon())) {
 			throw new CustomException("coupon name is exists");
 		}
 		return couponMapper.toResponse(couponRepository.save(couponMapper.toEntity(couponRequest)));
 	}
 	
+	// chức năng update thông tin phiếu giảm giá theo id
 	@Override
 	public CouponResponse update(CouponRequest couponRequest, Long id) throws CustomException {
+		// Ánh xạ Coupon từ CouponRequest, đặt ID và kiểm tra tên Coupon cập nhật
 		Coupon coupon = couponMapper.toEntity(couponRequest);
 		coupon.setId(id);
+		
+		// Kiểm tra nếu tên giống với tên hiện có, cập nhật và trả về CouponResponse
+		// Ngược lại, kiểm tra nếu đã tồn tại một Coupon với tên cập nhật, ném ngoại lệ tùy chỉnh
+		// Ngược lại, cập nhật và trả về CouponResponse
 		if(couponRequest.getCoupon().equals(couponRepository.findById(id).orElseThrow(()->new CustomException("coupon not found")).getCoupon())) {
 			return couponMapper.toResponse(couponRepository.save(coupon));
 		}
@@ -58,8 +85,11 @@ public class CouponService implements ICouponService {
 		return couponMapper.toResponse(couponRepository.save(coupon));
 	}
 	
+	// chức năng thay đổi trạng thái phiếu giảm giá ( true or false )
 	@Override
 	public CouponResponse changeStatusCoupon(Long id) throws CustomException {
+		// Tìm kiếm Coupon theo ID. Nếu tìm thấy, thay đổi trạng thái và trả về CouponResponse đã cập nhật
+		// Nếu không tìm thấy, ném ngoại lệ tùy chỉnh thông báo rằng Coupon không được tìm thấy
 		Optional<Coupon> optionalCoupon = couponRepository.findById(id);
 		if(optionalCoupon.isPresent()) {
 			Coupon coupon = optionalCoupon.get();

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ICouponService {
 	
-	List<CouponResponse> findAll(Optional<String> search);
+	List<CouponResponse> findAll(String search);
 	CouponResponse findById(Long id) throws CustomException;
 	CouponResponse save(CouponRequest couponRequest) throws CustomException;
 	CouponResponse update(CouponRequest couponRequest,Long id) throws CustomException;
