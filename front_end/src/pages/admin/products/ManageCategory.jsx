@@ -10,8 +10,8 @@ import Button from "@mui/material/Button";
 import { CATEGORY } from "../../../redux/selectors/selectors";
 import CategoryIcon from "@mui/icons-material/Category";
 import EditIcon from "@mui/icons-material/Edit";
-import FormAddCategory from "../../../components/form/FormAddCategory";
-import FormEditCategory from "../../../components/form/FormEditCategory";
+import FormAddCategory from "../../../components/form/category/FormAddCategory";
+import FormEditCategory from "../../../components/form/category/FormEditCategory";
 import { GET_ALL_CATEGORY } from "../../../redux/api/service/categoryService";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -30,6 +30,7 @@ function ManageCategory() {
   const dispatch = useDispatch();
   const categories = useSelector(CATEGORY);
 
+  // handle add new category
   const [toggle, setToggle] = useState(false);
   const handleCreateForm = () => setToggle(true);
   const handleCloseForm = () => setToggle(false);

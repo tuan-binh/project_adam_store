@@ -1,17 +1,18 @@
 import {
   formatDate,
+  formatDateToInput,
   numberPercent,
   numberStock,
   validateBlank,
   validateDate,
-} from "../../utils/ValidateForm";
+} from "../../../utils/ValidateForm";
 import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import { post_add_coupon } from "../../redux/thunk/couponThunk";
+import { put_update_coupon } from "../../../redux/thunk/couponThunk";
 import { useDispatch } from "react-redux";
 
 const style = {
@@ -26,7 +27,7 @@ const style = {
   p: 2,
 };
 
-function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
+function FormEditCoupon({ toggleEdit, handleCloseEdit, edit }) {
   const dispatch = useDispatch();
 
   const [errorCouponName, setErrorCouponName] = useState("");
@@ -41,7 +42,7 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
     setErrorDate("");
   };
 
-  const handleAddCoupon = (e) => {
+  const handleUpdateCoupon = (e) => {
     e.preventDefault();
 
     const formCoupon = {
@@ -91,14 +92,17 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
     }
     // dispatch actions
     dispatch(
-      post_add_coupon({
-        ...formCoupon,
-        startDate: formatDate(formCoupon.startDate),
-        endDate: formatDate(formCoupon.endDate),
+      put_update_coupon({
+        formCoupon: {
+          ...formCoupon,
+          startDate: formatDate(formCoupon.startDate),
+          endDate: formatDate(formCoupon.endDate),
+        },
+        id: edit.id,
       })
     ).then((resp) => {
       if (resp === true) {
-        handleCloseAdd();
+        handleCloseEdit();
       } else {
         setErrorCouponName(resp);
       }
@@ -113,8 +117,8 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
 
   return (
     <Modal
-      open={toggleAdd}
-      onClose={handleCloseAdd}
+      open={toggleEdit}
+      onClose={handleCloseEdit}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -122,7 +126,7 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
         <form
           action=""
           className="flex flex-col gap-2"
-          onSubmit={handleAddCoupon}
+          onSubmit={handleUpdateCoupon}
         >
           <TextField
             error={errorCouponName}
@@ -130,6 +134,7 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
             label={errorCouponName ? errorCouponName : "Coupon Name"}
             variant="filled"
             size="small"
+            defaultValue={edit.coupon}
           />
           <TextField
             error={errorPercent}
@@ -138,6 +143,7 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
             variant="filled"
             size="small"
             type="number"
+            defaultValue={edit.percent}
           />
           <TextField
             error={errorStock}
@@ -146,6 +152,7 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
             variant="filled"
             size="small"
             type="number"
+            defaultValue={edit.stock}
           />
           <div style={{ display: "flex", width: "100%", gap: "10px" }}>
             <TextField
@@ -157,6 +164,7 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
               name="created"
               type="date"
               sx={{ flex: 1, margin: "10px 0" }}
+              defaultValue={formatDateToInput(edit.startDate)}
             />
             <TextField
               error={errorDate}
@@ -167,10 +175,11 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
               name="dueDate"
               type="date"
               sx={{ flex: 1, margin: "10px 0" }}
+              defaultValue={formatDateToInput(edit.endDate)}
             />
           </div>
           <Button type="submit" variant="contained">
-            ADD
+            UPDATE
           </Button>
         </form>
       </Box>
@@ -178,4 +187,4 @@ function FormAddCoupon({ toggleAdd, handleCloseAdd }) {
   );
 }
 
-export default FormAddCoupon;
+export default FormEditCoupon;

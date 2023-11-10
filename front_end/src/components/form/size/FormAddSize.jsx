@@ -3,32 +3,32 @@ import CloseIcon from "@mui/icons-material/Close";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
-import { post_add_category } from "../../redux/thunk/categoryThunk";
+import { post_add_size } from "../../../redux/thunk/sizeThunk";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { validateBlank } from "../../utils/ValidateForm";
+import { validateBlank } from "../../../utils/ValidateForm";
 
-function FormAddCategory({ handleCloseForm }) {
+function FormAddSize({ handleCloseForm }) {
   const dispatch = useDispatch();
 
-  const [categoryName, setCategoryName] = useState("");
-
-  const [errorCategoryName, setErrorCategoryName] = useState("");
-
-  const handleAddCategory = () => {
-    const formCategory = {
-      categoryName,
+  const [sizeName, setSizeName] = useState("");
+  const [errorSizeName, setErrorSizeName] = useState("");
+  const handleAddSize = () => {
+    const formSize = {
+      sizeName,
       status: true,
     };
-    if (validateBlank(formCategory.categoryName)) {
-      setErrorCategoryName("you can't blank category name");
+    // vadlidate blank
+    if (validateBlank(formSize.sizeName)) {
+      setErrorSizeName("Size Name can't blank");
       return;
     }
-    dispatch(post_add_category(formCategory)).then((resp) => {
+    // dispatch add size
+    dispatch(post_add_size(formSize)).then((resp) => {
       if (resp === true) {
         handleCloseForm();
       } else {
-        setErrorCategoryName(resp);
+        setErrorSizeName(resp);
       }
     });
   };
@@ -40,21 +40,21 @@ function FormAddCategory({ handleCloseForm }) {
       </TableCell>
       <TableCell align="center">
         <TextField
-          error={errorCategoryName}
+          error={errorSizeName}
           autoFocus
           fullWidth
           size="small"
-          label={errorCategoryName ? errorCategoryName : "Category Name"}
-          name="categoryName"
+          label={errorSizeName ? errorSizeName : "Size Name"}
+          name="sizeName"
           variant="outlined"
-          onChange={(e) => setCategoryName(e.target.value)}
+          onChange={(e) => setSizeName(e.target.value)}
         />
       </TableCell>
       <TableCell align="center">
         <i className="fa-solid fa-lock-open"></i>
       </TableCell>
       <TableCell align="center">
-        <Button variant="contained" onClick={handleAddCategory}>
+        <Button variant="contained" onClick={handleAddSize}>
           ADD
         </Button>
       </TableCell>
@@ -62,4 +62,4 @@ function FormAddCategory({ handleCloseForm }) {
   );
 }
 
-export default FormAddCategory;
+export default FormAddSize;

@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
+import FilterIcon from "@mui/icons-material/Filter";
+import FormAddProduct from "../../../components/form/product/FormAddProduct";
 import FormControl from "@mui/material/FormControl";
+import FormEditImageProduct from "../../../components/form/product/FormEditImageProduct";
+import FormEditProductInfo from "../../../components/form/product/FormEditProductInfo";
 import { GET_ALL_CATEGORY } from "../../../redux/api/service/categoryService";
 import { GET_ALL_PRODUCT } from "../../../redux/api/service/productService";
 import InputLabel from "@mui/material/InputLabel";
@@ -25,13 +29,43 @@ import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import { changeCurrentPage } from "../../../redux/reducers/productSlice";
+import { put_status_product } from "../../../redux/thunk/productThunk";
 
 function ManageProduct() {
   const dispatch = useDispatch();
   const categories = useSelector(CATEGORY);
   const products = useSelector(PRODUCT);
 
-  // handle filter category
+  // handle add new product
+  const [toggle, setToggle] = useState(false);
+  const handleCreateForm = () => setToggle(true);
+  const handleCloseForm = () => setToggle(false);
+
+  // data edit
+  const [edit, setEdit] = useState(null);
+  // handle edit info product
+
+  const [openEditInfo, setOpenEditInfo] = useState(false);
+  const handleOpenEditInfo = (item) => {
+    setEdit(item);
+    setOpenEditInfo(true);
+  };
+  const handleCloseEditInfo = () => setOpenEditInfo(false);
+
+  // handle edit image product
+  const [openEditImage, setOpenEditImage] = useState(false);
+  const handleOpenEditImage = (item) => {
+    setEdit(item);
+    setOpenEditImage(true);
+  };
+  const handleCloseEditImage = () => setOpenEditImage(false);
+
+  // handle change status product
+  const handleChangeStatusProduct = (id) => {
+    dispatch(put_status_product(id));
+  };
+
+  // handle filter by category
   const [category, setCategory] = useState("ALL");
   const handleChangeCategory = (event) => {
     setCategory(event.target.value);
@@ -42,26 +76,33 @@ function ManageProduct() {
   const handleChangeSearch = (e) => setSearch(e.target.value);
 
   // handle change page
-  const [page, setPage] = useState(products.current || 1);
   const handleChangePage = (e, value) => {
     dispatch(changeCurrentPage(value));
-    setPage(value);
+  };
+
+  // handle load product
+  const handleLoadProduct = (newPage) => {
+    dispatch(GET_ALL_PRODUCT({ search, category, page: newPage }));
   };
 
   useEffect(() => {
     dispatch(GET_ALL_CATEGORY(""));
-    dispatch(GET_ALL_PRODUCT({ search, category, page: page - 1 }));
-  }, [search, category, page]);
+    handleLoadProduct(products.current - 1);
+  }, [search, category, products.current]);
 
   return (
     <div>
-      {console.log(products)}
+      {console.log("current ->", products.products)}
       <div className="flex justify-center text-3xl font-semibold uppercase">
         Manage Products
       </div>
       <div className="flex justify-end">
         <div className="add_manager">
-          <Button variant="contained" className="flex gap-2">
+          <Button
+            variant="contained"
+            className="flex gap-2"
+            onClick={handleCreateForm}
+          >
             <WidgetsIcon /> <span>ADD PRODUCT</span>
           </Button>
         </div>
@@ -151,19 +192,40 @@ function ManageProduct() {
                       <TableCell align="center">
                         {item?.status ? (
                           <div className="flex gap-2 justify-center">
-                            <Button variant="contained" color="warning">
-                              <Tooltip title="edit">
+                            <Button
+                              variant="contained"
+                              color="warning"
+                              onClick={() => handleOpenEditInfo(item)}
+                            >
+                              <Tooltip title="edit info">
                                 <EditIcon />
                               </Tooltip>
                             </Button>
-                            <Button variant="contained" color="error">
+                            <Button
+                              variant="contained"
+                              color="success"
+                              onClick={() => handleOpenEditImage(item)}
+                            >
+                              <Tooltip title="edit image">
+                                <FilterIcon />
+                              </Tooltip>
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="error"
+                              onClick={() => handleChangeStatusProduct(item.id)}
+                            >
                               <Tooltip title="lock">
                                 <LockOutlinedIcon />
                               </Tooltip>
                             </Button>
                           </div>
                         ) : (
-                          <Button variant="contained" color="success">
+                          <Button
+                            variant="contained"
+                            color="success"
+                            onClick={() => handleChangeStatusProduct(item.id)}
+                          >
                             <Tooltip title="unlock">
                               <LockOpenOutlinedIcon />
                             </Tooltip>
@@ -180,6 +242,7 @@ function ManageProduct() {
         <div className="pagination flex justify-end py-5">
           <Pagination
             count={products.totalPages}
+            page={products.current}
             color="primary"
             hideNextButton
             hidePrevButton
@@ -187,6 +250,27 @@ function ManageProduct() {
           />
         </div>
       </div>
+      {toggle && (
+        <FormAddProduct
+          toggle={toggle}
+          handleCloseForm={handleCloseForm}
+          handleLoadProduct={handleLoadProduct}
+        />
+      )}
+      {openEditInfo && (
+        <FormEditProductInfo
+          openEditInfo={openEditInfo}
+          handleCloseEditInfo={handleCloseEditInfo}
+          editInfo={edit}
+        />
+      )}
+      {openEditImage && (
+        <FormEditImageProduct
+          openEditImage={openEditImage}
+          handleCloseEditImage={handleCloseEditImage}
+          editImage={edit}
+        />
+      )}
     </div>
   );
 }

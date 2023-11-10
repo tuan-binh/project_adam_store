@@ -1,4 +1,8 @@
 import { TIME_OUT, debouncing } from "../../../utils/deboucing";
+import {
+  disabledEditItem,
+  enableEditItem,
+} from "../../../redux/reducers/colorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
@@ -6,6 +10,8 @@ import Button from "@mui/material/Button";
 import { COLOR } from "../../../redux/selectors/selectors";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import EditIcon from "@mui/icons-material/Edit";
+import FormAddColor from "../../../components/form/color/FormAddColor";
+import FormEditColor from "../../../components/form/color/FormEditColor";
 import { GET_ALL_COLOR } from "../../../redux/api/service/colorService";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -18,11 +24,26 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
+import { put_status_color } from "../../../redux/thunk/colorThunk";
 
 function ManageColor() {
   const dispatch = useDispatch();
 
   const colors = useSelector(COLOR);
+
+  // handle add new color
+  const [toggle, setToggle] = useState(false);
+  const handleCreateForm = () => setToggle(true);
+  const handleCloseForm = () => setToggle(false);
+
+  // handle edit color
+  const handleEditColor = (id) => {
+    dispatch(enableEditItem(id));
+  };
+
+  const handleChangeStautsColor = (id) => {
+    dispatch(put_status_color(id));
+  };
 
   // handle search
   const [search, setSearch] = useState("");
@@ -39,7 +60,11 @@ function ManageColor() {
       </div>
       <div className="flex justify-end">
         <div className="add_manager">
-          <Button variant="contained" className="flex gap-2">
+          <Button
+            variant="contained"
+            className="flex gap-2"
+            onClick={handleCreateForm}
+          >
             <ColorLensIcon /> <span>ADD COLOR</span>
           </Button>
         </div>
@@ -67,49 +92,72 @@ function ManageColor() {
                 </TableRow>
               </TableHead>
               <TableBody>
+                {toggle && <FormAddColor handleCloseForm={handleCloseForm} />}
                 {colors.colors.map((item, index) => {
-                  return (
-                    <TableRow
-                      key={item?.id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                      }}
-                    >
-                      <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="center">
-                        {item.colorName.toUpperCase()}
-                      </TableCell>
-                      <TableCell align="center">
-                        {item?.status ? (
-                          <i className="fa-solid fa-lock-open"></i>
-                        ) : (
-                          <i className="fa-solid fa-lock"></i>
-                        )}
-                      </TableCell>
-                      <TableCell align="center">
-                        {item?.status ? (
-                          <div className="flex gap-2 justify-center">
-                            <Button variant="contained" color="warning">
-                              <Tooltip title="edit">
-                                <EditIcon />
+                  if (item.isEdit) {
+                    return (
+                      <FormEditColor
+                        key={item.id}
+                        handleCloseForm={() => dispatch(disabledEditItem())}
+                        edit={item}
+                      />
+                    );
+                  } else {
+                    return (
+                      <TableRow
+                        key={item?.id}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell align="center">{index + 1}</TableCell>
+                        <TableCell align="center">
+                          {item.colorName.toUpperCase()}
+                        </TableCell>
+                        <TableCell align="center">
+                          {item?.status ? (
+                            <i className="fa-solid fa-lock-open"></i>
+                          ) : (
+                            <i className="fa-solid fa-lock"></i>
+                          )}
+                        </TableCell>
+                        <TableCell align="center">
+                          {item?.status ? (
+                            <div className="flex gap-2 justify-center">
+                              <Button
+                                variant="contained"
+                                color="warning"
+                                onClick={() => handleEditColor(item.id)}
+                              >
+                                <Tooltip title="edit">
+                                  <EditIcon />
+                                </Tooltip>
+                              </Button>
+                              <Button
+                                variant="contained"
+                                color="error"
+                                onClick={() => handleChangeStautsColor(item.id)}
+                              >
+                                <Tooltip title="lock">
+                                  <LockOutlinedIcon />
+                                </Tooltip>
+                              </Button>
+                            </div>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              color="success"
+                              onClick={() => handleChangeStautsColor(item.id)}
+                            >
+                              <Tooltip title="unlock">
+                                <LockOpenOutlinedIcon />
                               </Tooltip>
                             </Button>
-                            <Button variant="contained" color="error">
-                              <Tooltip title="lock">
-                                <LockOutlinedIcon />
-                              </Tooltip>
-                            </Button>
-                          </div>
-                        ) : (
-                          <Button variant="contained" color="success">
-                            <Tooltip title="unlock">
-                              <LockOpenOutlinedIcon />
-                            </Tooltip>
-                          </Button>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  }
                 })}
               </TableBody>
             </Table>

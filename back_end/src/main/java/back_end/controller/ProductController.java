@@ -28,7 +28,7 @@ public class ProductController {
 	
 	// chức năng lấy tất cả thông tin sản phẩm theo thể loại tìm kiếm và phân trang ở trong hệ thống
 	@GetMapping
-	public ResponseEntity<Page<ProductResponse>> getAllProducts(@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,@RequestParam String category,@RequestParam String search) {
+	public ResponseEntity<Page<ProductResponse>> getAllProducts(@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,@RequestParam String category,@RequestParam String search) {
 		return new ResponseEntity<>(productService.findAll(pageable,category,search), HttpStatus.OK);
 	}
 	

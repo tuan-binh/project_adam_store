@@ -1,6 +1,12 @@
-import { configHeader } from "../../../utils/configHeader";
+import { Cookies } from "react-cookie";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../axios";
+
+const configHeader = {
+  headers: {
+    Authorization: `Bearer ${new Cookies().get("token")}`,
+  },
+};
 
 export const GET_ALL_CATEGORY = createAsyncThunk(
   "category/GET_ALL_CATEGORY",

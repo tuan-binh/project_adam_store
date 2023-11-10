@@ -11,18 +11,8 @@ const productSlice = createSlice({
     current: 1,
   },
   reducers: {
-    addNewProduct: (state, action) => {
-      if (state.products.length === state.size) {
-        if (state.current === 1) {
-          state.products.unshift(action.payload);
-          state.products.pop();
-        }
-      } else {
-        state.products.unshift(action.payload);
-      }
-    },
     updateProduct: (state, action) => {
-      state.coupons = state.coupons.map((item) => {
+      state.products = state.products.map((item) => {
         if (item.id === action.payload.id) {
           return (item = action.payload);
         } else {
@@ -31,6 +21,7 @@ const productSlice = createSlice({
       });
     },
     changeCurrentPage: (state, action) => {
+      console.log(action.payload);
       state.current = action.payload;
     },
   },
@@ -44,11 +35,10 @@ const productSlice = createSlice({
         state.products = action.payload.content;
         state.totalPages = action.payload.totalPages;
         state.size = action.payload.size;
-        state.current = action.payload.number;
+        state.current = action.payload.number + 1;
       });
   },
 });
 
-export const { changeCurrentPage, addNewProduct, updateProduct } =
-  productSlice.actions;
+export const { changeCurrentPage, updateProduct } = productSlice.actions;
 export default productSlice.reducer;

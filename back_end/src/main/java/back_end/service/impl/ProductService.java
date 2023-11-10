@@ -82,6 +82,9 @@ public class ProductService implements IProductService {
 	public ProductResponse save(ProductRequest productRequest) throws CustomException {
 		// Ánh xạ ProductRequest thành đối tượng Product và lưu vào cơ sở dữ liệu
 		Product product = productMapper.toEntity(productRequest);
+		if(productRepository.existsByProductNameIgnoreCase(product.getProductName())) {
+			throw new CustomException("Product Name is exists");
+		}
 		Product newProduct = productRepository.save(product);
 		
 		// Lưu các URL ảnh liên quan vào cơ sở dữ liệu và ánh xạ sang ProductResponse
@@ -101,7 +104,12 @@ public class ProductService implements IProductService {
 			Product newProduct = productMapper.toEntity(productUpdateRequest);
 			newProduct.setId(id);
 			newProduct.setImage(optionalProduct.get().getImage());
-			
+			if(productUpdateRequest.getProductName().toUpperCase().equals(newProduct.getProductName())) {
+				return productMapper.toResponse(productRepository.save(newProduct));
+			}
+			if(productRepository.existsByProductNameIgnoreCase(newProduct.getProductName())) {
+				throw new CustomException("Product Name is exists");
+			}
 			// Ánh xạ và trả về ProductResponse sau khi cập nhật
 			return productMapper.toResponse(productRepository.save(newProduct));
 		}
@@ -180,13 +188,15 @@ public class ProductService implements IProductService {
 	public ProductResponse updateProductDetailInProduct(ProductDetailRequest productDetailRequest, Long productDetailId, Long productId) throws CustomException {
 		// Tìm kiếm sản phẩm theo ID và thực hiện cập nhật chi tiết sản phẩm nếu tìm thấy, nếu không ném CustomException
 		Optional<Product> optionalProduct = productRepository.findById(productId);
+		Optional<ProductDetail> optionalProductDetail = productDetailRepository.findById(productDetailId);
 		if (optionalProduct.isPresent()) {
 			ProductDetail productDetail = productDetailMapper.toEntity(productDetailRequest);
 			productDetail.setId(productDetailId);
 			
 			// Kiểm tra xem chi tiết sản phẩm có thuộc sản phẩm hay không trước khi cập nhật
-			if (Objects.equals(productDetail.getProduct().getId(), productId)) {
+			if (Objects.equals(optionalProductDetail.get().getProduct().getId(), productId)) {
 				// Lưu chi tiết sản phẩm và trả về ProductResponse sau khi cập nhật
+				productDetail.setProduct(optionalProduct.get());
 				productDetailRepository.save(productDetail);
 				return productMapper.toResponse(productRepository.findById(productId).orElseThrow(() -> new CustomException("product not found")));
 			}
