@@ -23,6 +23,14 @@ export const numberStock = (number) => {
   return false;
 };
 
+export const numberPrice = (number) => {
+  let check = Number(number);
+  if (check <= 0) {
+    return true;
+  }
+  return false;
+};
+
 export const numberPercent = (number) => {
   let check = Number(number);
   if (check <= 0 || check > 100) {

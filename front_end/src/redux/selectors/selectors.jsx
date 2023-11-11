@@ -9,3 +9,5 @@ export const PRODUCT = (state) => state.product;
 export const COLOR = (state) => state.color;
 
 export const SIZE = (state) => state.size;
+
+export const USER = (state) => state.user;

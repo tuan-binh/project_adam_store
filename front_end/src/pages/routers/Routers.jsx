@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 
 import AdminHome from "../admin/home/AdminHome";
-import AdminLogin from "../login_register/admin/AdminLogin";
 import Cart from "../users/cart/Cart";
 import Checkout from "../users/checkout/Checkout";
 import Contact from "../users/contact/Contact";
@@ -20,9 +19,9 @@ import Products from "../users/products/Products";
 import RevenueOrders from "../admin/revenue/RevenueOrders";
 import RevenueProducts from "../admin/revenue/RevenueProducts";
 import UserHome from "../users/home/UserHome";
-import UserLogin from "../login_register/users/UserLogin";
+import UserLogin from "../login_register/UserLogin";
 import UserOrders from "../users/orders/UserOrders";
-import UserRegister from "../login_register/users/UserRegister";
+import UserRegister from "../login_register/UserRegister";
 
 function Routers() {
   return (
@@ -34,7 +33,7 @@ function Routers() {
         {/* show list product */}
         <Route path="/products" Component={Products}></Route>
         {/* show product detail */}
-        <Route path="/products/detail" Component={ProductDetail}></Route>
+        <Route path="/products/detail/:id" Component={ProductDetail}></Route>
         {/* show coupon */}
         <Route path="/coupon" Component={Coupon}></Route>
         {/* show contact */}
@@ -51,7 +50,6 @@ function Routers() {
       <Route path="/login" Component={UserLogin}></Route>
       <Route path="/register" Component={UserRegister}></Route>
       {/* admin */}
-      <Route path="/admin/login" Component={AdminLogin}></Route>
       {/* home admin */}
       <Route path="/admin" Component={IndexAdminHome}>
         {/* dashboard */}

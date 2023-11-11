@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
-import ForgetPassword from "../../../components/modal/ForgetPassword";
+import ForgetPassword from "../../components/modal/ForgetPassword";
 import TextField from "@mui/material/TextField";
-import { post_login } from "../../../redux/thunk/authThunk";
+import { post_login } from "../../redux/thunk/authThunk";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { validateBlank } from "../../../utils/ValidateForm";
+import { validateBlank } from "../../utils/ValidateForm";
 
 function UserLogin() {
   const navigate = useNavigate();
@@ -39,8 +39,12 @@ function UserLogin() {
     }
     // dispatch form login
     dispatch(post_login(formLogin)).then((resp) => {
-      if (resp === true) {
-        navigate("/");
+      if (Array.isArray(resp)) {
+        if (resp.includes("ROLE_ADMIN")) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       } else {
         setError(resp);
       }

@@ -104,6 +104,7 @@ public class UserService implements IUserService {
 				  .phone(userPrincipal.getPhone())
 				  .address(userPrincipal.getAddress())
 				  .roles(roles)
+				  .favourite(getFavourite(authentication).stream().map(Product::getId).collect(Collectors.toList()))
 				  .status(userPrincipal.isStatus())
 				  .build();
 	}

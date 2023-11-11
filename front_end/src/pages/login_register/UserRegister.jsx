@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { post_register } from "../../../redux/thunk/authThunk";
+import { post_register } from "../../redux/thunk/authThunk";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { validateBlank } from "../../../utils/ValidateForm";
+import { validateBlank } from "../../utils/ValidateForm";
 
 function UserRegister() {
   const navigate = useNavigate();

@@ -5,6 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import couponSlice from "./reducers/couponSlice";
 import productSlice from "./reducers/productSlice";
 import sizeSlice from "./reducers/sizeSlice";
+import userSlice from "./reducers/userSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     product: productSlice,
     color: colorSlice,
     size: sizeSlice,
+    user: userSlice,
   },
 });
 

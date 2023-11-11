@@ -71,7 +71,7 @@ function UserNavbar() {
 
   return (
     <>
-      <nav className="bg-white h-20 flex justify-between items-center bg-gradient-to-b from-slate-400 px-10 sticky top-0 z-10">
+      <nav className="h-20 flex justify-between items-center bg-gradient-to-b from-slate-400 px-10 sticky top-0 z-10">
         <div className="logo button w-96" onClick={() => navigate("/")}>
           <span className="actual-text">&nbsp;ADAM&nbsp;STORE&nbsp;</span>
           <span aria-hidden="true" className="hover-text">
@@ -96,7 +96,7 @@ function UserNavbar() {
           {user ? (
             <>
               <div>
-                <Tooltip title={user.fullName}>
+                <Tooltip title={user.fullName} placement="left">
                   <PersonIcon
                     className="hover:cursor-pointer"
                     id="fade-button"

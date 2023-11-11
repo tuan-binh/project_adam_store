@@ -88,7 +88,9 @@ function ManageColor() {
                   <TableCell align="center">STT</TableCell>
                   <TableCell align="center">COLOR NAME</TableCell>
                   <TableCell align="center">STATUS</TableCell>
-                  <TableCell align="center">ACTIONS</TableCell>
+                  <TableCell align="center" sx={{ width: "300px" }}>
+                    ACTIONS
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

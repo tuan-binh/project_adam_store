@@ -53,3 +53,40 @@ export const DELETE_IMAGE_PRODUCT = async ({ idImage, idProduct }) => {
   );
   return resp;
 };
+
+export const POST_ADD_PRODUCT_DETAIL = async ({
+  formProductDetail,
+  idProduct,
+}) => {
+  let resp = await instance.post(
+    `/api/products/${idProduct}`,
+    formProductDetail,
+    configHeader
+  );
+  return resp;
+};
+
+export const PUT_UPDATE_PRODUCT_DETAIL = async ({
+  formProductDetail,
+  idProductDetail,
+  idProduct,
+}) => {
+  let resp = await instance.put(
+    `/api/products/${idProductDetail}/in/${idProduct}`,
+    formProductDetail,
+    configHeader
+  );
+  return resp;
+};
+
+export const PUT_STATUS_PRODUCT_DETAIL = async ({
+  idProductDetail,
+  idProduct,
+}) => {
+  let resp = await instance.put(
+    `/api/products/${idProductDetail}/in/${idProduct}/status`,
+    {},
+    configHeader
+  );
+  return resp;
+};

@@ -20,5 +20,6 @@ public class JwtResponse {
 	private String phone;
 	private String address;
 	private List<String> roles = new ArrayList<>();
+	private List<Long> favourite = new ArrayList<>();
 	private boolean status;
 }

@@ -10,6 +10,7 @@ import back_end.service.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +100,7 @@ public class CartService implements ICartService {
 	
 	// chức năng xóa hết tất cả sản phẩm trong giỏ hàng
 	@Override
+	@Transactional
 	public List<CartItemResponse> clearCartUser(Authentication authentication) throws CustomException {
 		// lấy đối tượng user đã đăng nhập ở đối tượng authentication
 		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();

@@ -19,6 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Pagination from "@mui/material/Pagination";
 import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
+import ShowProductDetail from "../../../components/modal/ShowProductDetail";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -64,6 +65,16 @@ function ManageProduct() {
   const handleChangeStatusProduct = (id) => {
     dispatch(put_status_product(id));
   };
+
+  // handle open product detail
+  const [productDetail, setProductDetail] = useState(null);
+
+  const [openProductDetail, setOpenProductDetail] = useState(false);
+  const handleOpenProductDetail = (item) => {
+    setProductDetail(item);
+    setOpenProductDetail(true);
+  };
+  const handleCloseProductDetail = () => setOpenProductDetail(false);
 
   // handle filter by category
   const [category, setCategory] = useState("ALL");
@@ -147,7 +158,9 @@ function ManageProduct() {
                   <TableCell align="center">IMAGE</TableCell>
                   <TableCell align="center">CATEGORY</TableCell>
                   <TableCell align="center">STATUS</TableCell>
-                  <TableCell align="center">ACTIONS</TableCell>
+                  <TableCell align="center" sx={{ width: "300px" }}>
+                    ACTIONS
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -160,12 +173,28 @@ function ManageProduct() {
                       }}
                       className="hover:bg-slate-100 transition-all duration-300"
                     >
-                      <TableCell align="center">{index + 1}</TableCell>
-                      <TableCell align="left">
+                      <TableCell
+                        align="center"
+                        onClick={() => handleOpenProductDetail(item)}
+                      >
+                        {index + 1}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        onClick={() => handleOpenProductDetail(item)}
+                      >
                         {item.productName.toUpperCase()}
                       </TableCell>
-                      <TableCell align="left">{item.description}</TableCell>
-                      <TableCell align="center">
+                      <TableCell
+                        align="left"
+                        onClick={() => handleOpenProductDetail(item)}
+                      >
+                        {item.description}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        onClick={() => handleOpenProductDetail(item)}
+                      >
                         <img
                           src={item.image}
                           style={{
@@ -179,10 +208,16 @@ function ManageProduct() {
                           alt=""
                         />
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell
+                        align="center"
+                        onClick={() => handleOpenProductDetail(item)}
+                      >
                         {item.category.categoryName}
                       </TableCell>
-                      <TableCell align="center">
+                      <TableCell
+                        align="center"
+                        onClick={() => handleOpenProductDetail(item)}
+                      >
                         {item?.status ? (
                           <i className="fa-solid fa-lock-open"></i>
                         ) : (
@@ -269,6 +304,13 @@ function ManageProduct() {
           openEditImage={openEditImage}
           handleCloseEditImage={handleCloseEditImage}
           editImage={edit}
+        />
+      )}
+      {openProductDetail && (
+        <ShowProductDetail
+          openProductDetail={openProductDetail}
+          handleCloseProductDetail={handleCloseProductDetail}
+          productDetail={productDetail}
         />
       )}
     </div>

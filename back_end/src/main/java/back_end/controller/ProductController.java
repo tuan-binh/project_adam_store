@@ -40,14 +40,12 @@ public class ProductController {
 	
 	// chức năng thêm thông tin sản phẩm vào trong hệ thống
 	@PostMapping
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ProductResponse> addNewProduct(@RequestBody ProductRequest productRequest) throws CustomException {
 		return new ResponseEntity<>(productService.save(productRequest), HttpStatus.CREATED);
 	}
 	
 	// chức năng update thông tin sản phẩm theo id
 	@PutMapping("/{productId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ProductResponse> updateProduct(@RequestBody ProductUpdateRequest productUpdateRequest, @PathVariable Long productId) throws CustomException {
 		return new ResponseEntity<>(productService.update(productUpdateRequest, productId), HttpStatus.OK);
 	}
@@ -56,7 +54,6 @@ public class ProductController {
 	// nếu nó là true thì hiển thị sản phẩm ở phía người dùng ( sản phẩm được tiếp tục bán trong shop )
 	// nếu nó là false thì sẽ ẩn đi ở phía người dùng ( sản phẩm đã ko được bán ở trong shop )
 	@PutMapping("/{productId}/status")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ProductResponse> changeStatusProduct(@PathVariable Long productId) throws CustomException {
 		return new ResponseEntity<>(productService.changeStatusProduct(productId), HttpStatus.OK);
 	}
@@ -65,14 +62,12 @@ public class ProductController {
 	
 	// chức năng thêm danh sách ảnh vào sản phẩm theo id sản phẩm
 	@PutMapping("/{productId}/image")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ProductResponse> addImageToProduct(@RequestBody ImageProductRequest imageProductRequest, @PathVariable Long productId) throws CustomException {
 		return new ResponseEntity<>(productService.addImageToProduct(imageProductRequest, productId), HttpStatus.OK);
 	}
 	
 	// chức năng xóa ảnh của sản phẩm dựa vào id ảnh và id sản phẩm
 	@DeleteMapping("/{imageId}/in/{productId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ProductResponse> deleteImageInProduct(@PathVariable Long imageId, @PathVariable Long productId) throws CustomException {
 		return new ResponseEntity<>(productService.deleteImageInProduct(imageId, productId), HttpStatus.OK);
 	}
@@ -81,21 +76,18 @@ public class ProductController {
 	
 	// chức năng liên quan đến thêm thông tin đến sản phẩm chi tiết dựa theo id của sản phẩm
 	@PostMapping("/{productId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ProductResponse> addProductDetailToProduct(@RequestBody ProductDetailRequest productDetailRequest, @PathVariable Long productId) throws CustomException {
 		return new ResponseEntity<>(productService.addProductDetailToProduct(productDetailRequest, productId), HttpStatus.CREATED);
 	}
 	
 	// chức năng update thông tin sản phẩm chi tiết dựa theo id chi tiết và id product
 	@PutMapping("/{productDetailId}/in/{productId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ProductResponse> updateProductDetailInProduct(@RequestBody ProductDetailRequest productDetailRequest, @PathVariable Long productDetailId, @PathVariable Long productId) throws CustomException {
 		return new ResponseEntity<>(productService.updateProductDetailInProduct(productDetailRequest, productDetailId, productId), HttpStatus.OK);
 	}
 	
 //	// chức năng thay đổi trạng thái sản phẩm chi tiết ( true or false )
 	@PutMapping("/{productDetailId}/in/{productId}/status")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ProductResponse> changeStatusProductDetail(@PathVariable Long productDetailId, @PathVariable long productId) throws CustomException {
 		return new ResponseEntity<>(productService.changeStatusProductDetail(productDetailId, productId), HttpStatus.OK);
 	}

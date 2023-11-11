@@ -19,10 +19,32 @@ function PropertiesProduct({ openProperties, handleCloseProperties }) {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <img
-          src="https://theme.hstatic.net/1000333436/1001040510/14/vendor_value_4.jpg?v=142"
-          alt=""
-        />
+        <div className="flex flex-wrap">
+          <div className="w-1/2">
+            <img
+              src="https://theme.hstatic.net/1000333436/1001040510/14/vendor_value_4.jpg?v=142"
+              alt=""
+            />
+          </div>
+          <div className="w-1/2">
+            <img
+              src="https://theme.hstatic.net/1000333436/1001040510/14/vendor_value_3.jpg?v=142"
+              alt=""
+            />
+          </div>
+          <div className="w-1/2">
+            <img
+              src="https://theme.hstatic.net/1000333436/1001040510/14/vendor_value_2.jpg?v=142"
+              alt=""
+            />
+          </div>
+          <div className="w-1/2">
+            <img
+              src="https://theme.hstatic.net/1000333436/1001040510/14/vendor_value_1.jpg?v=142"
+              alt=""
+            />
+          </div>
+        </div>
       </Box>
     </Modal>
   );

@@ -1,5 +1,6 @@
 import { POST_LOGIN, POST_REGISTER } from "../api/service/authService";
 import { resetUser, setUser } from "../reducers/authSlice";
+import { setFavourite, setUserLogin } from "../reducers/userSlice";
 
 import { Cookies } from "react-cookie";
 
@@ -12,8 +13,10 @@ export const post_login = (formLogin) => {
       cookie.set("token", data.token, { path: "/" });
       cookie.set("roles", data.roles, { path: "/" });
       localStorage.setItem("user", JSON.stringify(data));
+      dispatch(setFavourite(data.favourite));
+      dispatch(setUserLogin(data));
       dispatch(setUser(data));
-      return true;
+      return data.roles;
     } else {
       return response.data;
     }

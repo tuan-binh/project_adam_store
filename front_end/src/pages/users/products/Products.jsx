@@ -1,42 +1,54 @@
+import { CATEGORY, PRODUCT } from "../../../redux/selectors/selectors";
+import { TIME_OUT, debouncing } from "../../../utils/deboucing";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import Banner from "../../../components/banner/Banner";
-import { CATEGORY } from "../../../redux/selectors/selectors";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { GET_ALL_CATEGORY } from "../../../redux/api/service/categoryService";
+import { GET_ALL_PRODUCT } from "../../../redux/api/service/productService";
 import InputLabel from "@mui/material/InputLabel";
 import ItemProduct from "./item/ItemProduct";
 import MenuItem from "@mui/material/MenuItem";
 import Pagination from "@mui/material/Pagination";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
+import { changeCurrentPage } from "../../../redux/reducers/productSlice";
 
 function Products() {
   const dispatch = useDispatch();
   const categories = useSelector(CATEGORY);
+  const products = useSelector(PRODUCT);
 
-  // handle filter by price
-  const [priceValue, setPriceValue] = useState("ALL");
-  const handleChangePriceValue = (event) => {
-    setPriceValue(event.target.value);
-  };
   // handle filter by category
   const [categoryValue, setCategoryValue] = useState("ALL");
-
   const handleChangeCategoryValue = (event) => {
     setCategoryValue(event.target.value);
   };
 
+  // handle search
+  const [search, setSearch] = useState("");
+  const handleChangeSearch = (e) => setSearch(e.target.value);
+
+  // handle change page
+  const handleChangePage = (e, value) => {
+    dispatch(changeCurrentPage(value));
+  };
+
   useEffect(() => {
     dispatch(GET_ALL_CATEGORY(""));
-  }, []);
+    dispatch(
+      GET_ALL_PRODUCT({
+        search,
+        category: categoryValue,
+        page: products.current - 1,
+      })
+    );
+  }, [search, categoryValue, products.current]);
 
   return (
     <div>
+      {console.log(products)}
       <Banner title={"PRODUCTS"} />
       <main className="mx-60 flex gap-10 py-10">
         {/* handle filter */}
@@ -52,6 +64,7 @@ function Products() {
                 label="Search"
                 variant="outlined"
                 size="small"
+                onChange={debouncing(handleChangeSearch, TIME_OUT)}
               />
             </div>
             <div
@@ -76,7 +89,7 @@ function Products() {
                       categories.categories.map((item) => {
                         if (item.status) {
                           return (
-                            <MenuItem key={item.id} value={item.id}>
+                            <MenuItem key={item.id} value={item.categoryName}>
                               {item.categoryName}
                             </MenuItem>
                           );
@@ -86,64 +99,32 @@ function Products() {
                 </FormControl>
               </div>
             </div>
-            <div
-              className="p-5 rounded-md shadow-md"
-              style={{ background: "#f1f2f6" }}
-            >
-              <h2 className="uppercase font-semibold text-xl">
-                Filter by price
-              </h2>
-              <div className="filter">
-                <FormControl>
-                  <RadioGroup
-                    aria-labelledby="demo-controlled-radio-buttons-group"
-                    name="controlled-radio-buttons-group"
-                    value={priceValue}
-                    onChange={handleChangePriceValue}
-                  >
-                    <FormControlLabel
-                      value="ALL"
-                      control={<Radio />}
-                      label="ALL"
-                    />
-                    <FormControlLabel
-                      value="100-200"
-                      control={<Radio />}
-                      label="100$ - 200$"
-                    />
-                    <FormControlLabel
-                      value="200-300"
-                      control={<Radio />}
-                      label="200$ - 300$"
-                    />
-                    <FormControlLabel
-                      value="300-400"
-                      control={<Radio />}
-                      label="300$ - 400$"
-                    />
-                    <FormControlLabel
-                      value="400-500"
-                      control={<Radio />}
-                      label="400$ - 500$"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </div>
-            </div>
           </div>
         </div>
         {/* handle show products */}
         <div className="flex-1 pt-20 px-3">
           <div className=" flex gap-x-5 gap-y-20 flex-wrap">
-            <ItemProduct />
-            <ItemProduct />
-            <ItemProduct />
-            <ItemProduct />
-            <ItemProduct />
-            <ItemProduct />
+            {products.products.length > 0 ? (
+              products.products.map((item) => {
+                if (item.status === true) {
+                  return <ItemProduct key={item.id} item={item} />;
+                }
+              })
+            ) : (
+              <div className="text-3xl flex justify-center w-full items-center h-40">
+                <p>&quot;{search}&quot; not found</p>
+              </div>
+            )}
           </div>
           <div className="pagination py-10 flex justify-end">
-            <Pagination count={10} color="primary" />
+            <Pagination
+              count={products.totalPages}
+              page={products.current}
+              color="primary"
+              hideNextButton
+              hidePrevButton
+              onChange={handleChangePage}
+            />
           </div>
         </div>
       </main>

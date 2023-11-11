@@ -19,7 +19,7 @@ function AdminNavbar() {
   const handleClose = () => setAnchorEl(null);
 
   const handleLogout = () => {
-    navigate("/admin/login");
+    navigate("/login");
     localStorage.removeItem("active");
     dispatch(handle_logout());
     handleClose();
