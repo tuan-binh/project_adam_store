@@ -73,7 +73,7 @@ function Cart() {
     <div className="mx-60 py-20">
       {console.log(user.cart)}
       <div className="flex gap-10">
-        <div className="flex-1">
+        <div className="flex-1" style={{ minHeight: "490px" }}>
           <div className="flex justify-end py-2">
             <Button variant="contained" color="error" onClick={handleClearAll}>
               clear

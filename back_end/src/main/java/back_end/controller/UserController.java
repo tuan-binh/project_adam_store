@@ -4,6 +4,7 @@ import back_end.dto.request.UserPassword;
 import back_end.dto.request.UserUpdate;
 import back_end.dto.response.CartItemResponse;
 import back_end.dto.response.OrderResponse;
+import back_end.dto.response.ProductResponse;
 import back_end.dto.response.UserResponse;
 import back_end.exception.CustomException;
 import back_end.model.Product;
@@ -34,7 +35,7 @@ public class UserController {
 	
 	// chức năng lấy thông tin danh sách yêu thích của người dùng đang đăng nhập
 	@GetMapping("/favourite")
-	public ResponseEntity<List<Product>> getFavourite(Authentication authentication) throws CustomException {
+	public ResponseEntity<List<ProductResponse>> getFavourite(Authentication authentication) throws CustomException {
 		return new ResponseEntity<>(userService.getFavourite(authentication), HttpStatus.OK);
 	}
 	

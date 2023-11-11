@@ -58,3 +58,17 @@ export const DELETE_CLEAR_CART = async () => {
   let resp = await instance.delete("/api/cart", configHeader);
   return resp;
 };
+
+export const PUT_UPDATE_INFO_USER = async (formUpdate) => {
+  let resp = await instance.put("/api/user/update", formUpdate, configHeader);
+  return resp;
+};
+
+export const PUT_CHANGE_PASSWORD_USER = async (formPassword) => {
+  let resp = await instance.put(
+    "/api/user/password",
+    formPassword,
+    configHeader
+  );
+  return resp;
+};

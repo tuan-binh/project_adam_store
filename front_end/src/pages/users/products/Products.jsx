@@ -1,9 +1,14 @@
-import { CATEGORY, PRODUCT } from "../../../redux/selectors/selectors";
+import { CATEGORY, PRODUCT, USER } from "../../../redux/selectors/selectors";
 import { TIME_OUT, debouncing } from "../../../utils/deboucing";
+import {
+  delete_product_in_favourite,
+  post_add_product_to_favourite,
+} from "../../../redux/thunk/userThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import Banner from "../../../components/banner/Banner";
+import { Cookies } from "react-cookie";
 import FormControl from "@mui/material/FormControl";
 import { GET_ALL_CATEGORY } from "../../../redux/api/service/categoryService";
 import { GET_ALL_PRODUCT } from "../../../redux/api/service/productService";
@@ -12,6 +17,7 @@ import ItemProduct from "./item/ItemProduct";
 import MenuItem from "@mui/material/MenuItem";
 import Pagination from "@mui/material/Pagination";
 import Select from "@mui/material/Select";
+import Swal from "sweetalert2";
 import TextField from "@mui/material/TextField";
 import { changeCurrentPage } from "../../../redux/reducers/productSlice";
 
@@ -19,6 +25,8 @@ function Products() {
   const dispatch = useDispatch();
   const categories = useSelector(CATEGORY);
   const products = useSelector(PRODUCT);
+
+  const user = useSelector(USER);
 
   // handle filter by category
   const [categoryValue, setCategoryValue] = useState("ALL");
@@ -33,6 +41,26 @@ function Products() {
   // handle change page
   const handleChangePage = (e, value) => {
     dispatch(changeCurrentPage(value));
+  };
+
+  // handle like product
+  const handleLikeProduct = (idProduct) => {
+    if (!new Cookies().get("token")) {
+      Swal.fire({
+        title: "Good job!",
+        text: "Vui lòng đăng nhập!",
+        icon: "error",
+        showCloseButton: true,
+        cancelButtonColor: "#27ae60",
+        cancelButtonText: "OK",
+      });
+    }
+    let check = user.favourite.includes(idProduct);
+    if (check) {
+      dispatch(delete_product_in_favourite(idProduct));
+    } else {
+      dispatch(post_add_product_to_favourite(idProduct));
+    }
   };
 
   useEffect(() => {
@@ -107,7 +135,13 @@ function Products() {
             {products.products.length > 0 ? (
               products.products.map((item) => {
                 if (item.status === true) {
-                  return <ItemProduct key={item.id} item={item} />;
+                  return (
+                    <ItemProduct
+                      key={item.id}
+                      item={item}
+                      handleLikeProduct={handleLikeProduct}
+                    />
+                  );
                 }
               })
             ) : (

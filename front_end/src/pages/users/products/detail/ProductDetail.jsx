@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { Cookies } from "react-cookie";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PropertiesProduct from "../../../../components/modal/PropertiesProduct";
 import Swal from "sweetalert2";
@@ -62,6 +63,17 @@ function ProductDetail() {
 
   // handle like product
   const handleLikeProduct = (idProduct) => {
+    if (!new Cookies().get("token")) {
+      Swal.fire({
+        title: "Good job!",
+        text: "Vui lòng đăng nhập!",
+        icon: "error",
+        showCloseButton: true,
+        cancelButtonColor: "#27ae60",
+        cancelButtonText: "OK",
+      });
+      return;
+    }
     let check = user.favourite.includes(idProduct);
     if (check) {
       dispatch(delete_product_in_favourite(idProduct));
@@ -100,6 +112,17 @@ function ProductDetail() {
   // start handle add product to cart
   const handleAddProductToCart = () => {
     if (productDetail) {
+      if (!new Cookies().get("token")) {
+        Swal.fire({
+          title: "Good job!",
+          text: "Vui lòng đăng nhập!",
+          icon: "error",
+          showCloseButton: true,
+          cancelButtonColor: "#27ae60",
+          cancelButtonText: "OK",
+        });
+        return;
+      }
       dispatch(post_add_product_detail_to_cart(productDetail.id));
       Swal.fire({
         title: "Good job!",

@@ -5,7 +5,9 @@ import {
   GET_CART_USER,
   POST_ADD_PRODUCT_DETAIL_TO_CART,
   POST_ADD_PRODUCT_TO_FAVOURITE,
+  PUT_CHANGE_PASSWORD_USER,
   PUT_CHANGE_QUANTITY_CARTITEM,
+  PUT_UPDATE_INFO_USER,
 } from "../api/service/userService";
 import {
   addCartItem,
@@ -15,6 +17,7 @@ import {
   removeCartItem,
   removeProductIdInFavourite,
   setCart,
+  setUserLogin,
 } from "../reducers/userSlice";
 
 export const post_add_product_to_favourite = (idProduct) => {
@@ -94,6 +97,34 @@ export const delete_clear_all = () => {
     let resp = await DELETE_CLEAR_CART();
     if (resp.status === 200) {
       dispatch(clearCart());
+      return true;
+    } else {
+      return resp.data;
+    }
+  };
+};
+
+export const put_update_info_user = (formUpdate) => {
+  return async function put_update_info_user_thunk(dispatch) {
+    let resp = await PUT_UPDATE_INFO_USER(formUpdate);
+    if (resp.status === 200) {
+      const oldUser = JSON.parse(localStorage.getItem("user"));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...oldUser, ...resp.data })
+      );
+      dispatch(setUserLogin(resp.data));
+      return true;
+    } else {
+      return resp.data;
+    }
+  };
+};
+
+export const put_change_password_user = (formPassword) => {
+  return async function put_change_password_user_thunk() {
+    let resp = await PUT_CHANGE_PASSWORD_USER(formPassword);
+    if (resp.status === 200) {
       return true;
     } else {
       return resp.data;

@@ -4,12 +4,10 @@ import back_end.dto.request.UserLogin;
 import back_end.dto.request.UserPassword;
 import back_end.dto.request.UserRegister;
 import back_end.dto.request.UserUpdate;
-import back_end.dto.response.CartItemResponse;
-import back_end.dto.response.JwtResponse;
-import back_end.dto.response.OrderResponse;
-import back_end.dto.response.UserResponse;
+import back_end.dto.response.*;
 import back_end.exception.CustomException;
 import back_end.mapper.OrderMapper;
+import back_end.mapper.ProductMapper;
 import back_end.mapper.UserMapper;
 import back_end.model.*;
 import back_end.repository.IOrderDetailRepository;
@@ -51,6 +49,8 @@ public class UserService implements IUserService {
 	private IOrderDetailRepository orderDetailRepository;
 	@Autowired
 	private OrderMapper orderMapper;
+	@Autowired
+	private ProductMapper productMapper;
 	@Autowired
 	private UserMapper userMapper;
 	
@@ -104,7 +104,7 @@ public class UserService implements IUserService {
 				  .phone(userPrincipal.getPhone())
 				  .address(userPrincipal.getAddress())
 				  .roles(roles)
-				  .favourite(getFavourite(authentication).stream().map(Product::getId).collect(Collectors.toList()))
+				  .favourite(getFavourite(authentication).stream().map(ProductResponse::getId).collect(Collectors.toList()))
 				  .status(userPrincipal.isStatus())
 				  .build();
 	}
@@ -177,13 +177,13 @@ public class UserService implements IUserService {
 	
 	// chức năng lấy thông tin danh sách yêu thích của người dùng đang đăng nhập
 	@Override
-	public List<Product> getFavourite(Authentication authentication) throws CustomException {
+	public List<ProductResponse> getFavourite(Authentication authentication) throws CustomException {
 		// Lấy thông tin người dùng từ Principal
 		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
 		Users users = userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found"));
 		
 		// Trả về danh sách sản phẩm yêu thích
-		return new ArrayList<>(users.getFavourite());
+		return users.getFavourite().stream().map(item -> productMapper.toResponse(item)).collect(Collectors.toList());
 	}
 	
 	// chức năng lấy thông tin danh sách thông tin orders của người dùng đang đăng nhập
@@ -205,10 +205,11 @@ public class UserService implements IUserService {
 		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
 		Users users = userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found"));
 		// check xem số điện thoại có bị trùng ko nếu trùng sẽ ném ra ngoại lên CustomException
-		if(userRepository.existsByPhone(userUpdate.getPhone())) {
+		if(userRepository.existsByPhone(userUpdate.getPhone()) && !userUpdate.getPhone().equals(userRepository.findById(userPrinciple.getId()).orElseThrow(()->new CustomException("user not found")).getPhone())) {
 			throw new CustomException("phone is exists");
 		}
 		// Cập nhật địa chỉ và số điện thoại của người dùng
+		users.setFullName(userUpdate.getFullName());
 		users.setAddress(userUpdate.getAddress());
 		users.setPhone(userUpdate.getPhone());
 		

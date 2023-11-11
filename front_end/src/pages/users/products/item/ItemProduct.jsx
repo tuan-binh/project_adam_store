@@ -1,29 +1,14 @@
-import {
-  delete_product_in_favourite,
-  post_add_product_to_favourite,
-} from "../../../../redux/thunk/userThunk";
 import { getMaxPrice, getMinPrice } from "../../../../utils/showDataProduct";
-import { useDispatch, useSelector } from "react-redux";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { USER } from "../../../../redux/selectors/selectors";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function ItemProduct({ item }) {
+function ItemProduct({ item, handleLikeProduct }) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const user = useSelector(USER);
-
-  // handle like product
-  const handleLikeProduct = (idProduct) => {
-    let check = user.favourite.includes(idProduct);
-    if (check) {
-      dispatch(delete_product_in_favourite(idProduct));
-    } else {
-      dispatch(post_add_product_to_favourite(idProduct));
-    }
-  };
 
   return (
     <div>
@@ -31,8 +16,9 @@ function ItemProduct({ item }) {
         <div className="relative mx-4 -mt-6 h-96 overflow-hidden rounded-2xl border-2 border-black border-dashed bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
           <img
             src={item.image}
-            className="w-full h-full object-cover hover:scale-125 hover:rotate-6 transition-all duration-500"
+            className="w-full h-full object-cover hover:cursor-pointer hover:scale-125 hover:rotate-6 transition-all duration-500"
             alt=""
+            onClick={() => navigate(`/products/detail/${item.id}`)}
           />
           <FavoriteIcon
             className="absolute z-50 top-3 right-3 hover:cursor-pointer"
