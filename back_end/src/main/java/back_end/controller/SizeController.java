@@ -42,7 +42,6 @@ public class SizeController {
 	
 	// chức năng update thông tin sản phẩm vào hệ thống
 	@PutMapping("/{sizeId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<SizeResponse> updateSize(@RequestBody SizeRequest sizeRequest,@PathVariable Long sizeId) throws CustomException {
 		return new ResponseEntity<>(sizeService.update(sizeRequest,sizeId),HttpStatus.OK);
 	}
@@ -51,7 +50,6 @@ public class SizeController {
 	// nếu nó là true thì sẽ hiển thị và thêm nó vào sản phẩm chi tiết
 	//  nếu nó là false thì sẽ không hiển thị khi thêm vài sản phẩm chi tiết
 	@PutMapping("/{sizeId}/status")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<SizeResponse> changeStatusSize(@PathVariable Long sizeId) throws CustomException {
 		return new ResponseEntity<>(sizeService.changeStatusSize(sizeId),HttpStatus.OK);
 	}

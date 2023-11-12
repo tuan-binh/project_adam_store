@@ -6,7 +6,6 @@ const userSlice = createSlice({
     status: "",
     favourite: [],
     cart: [],
-    order: [],
     users: [],
     userLogin: {},
   },

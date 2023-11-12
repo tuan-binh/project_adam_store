@@ -103,7 +103,6 @@ function ManageProduct() {
 
   return (
     <div>
-      {console.log("current ->", products.products)}
       <div className="flex justify-center text-3xl font-semibold uppercase">
         Manage Products
       </div>

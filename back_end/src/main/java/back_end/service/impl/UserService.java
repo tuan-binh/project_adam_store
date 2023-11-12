@@ -18,6 +18,8 @@ import back_end.security.user_principal.UserPrinciple;
 import back_end.service.IRoleService;
 import back_end.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -188,14 +190,18 @@ public class UserService implements IUserService {
 	
 	// chức năng lấy thông tin danh sách thông tin orders của người dùng đang đăng nhập
 	@Override
-	public List<OrderResponse> getOrders(Authentication authentication) {
+	public Page<OrderResponse> getOrders(Pageable pageable, Authentication authentication,String orderStatus) {
 		// Lấy thông tin người dùng từ Principal
 		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
-		
+		Page<OrderResponse> list;
 		// Trả về danh sách đơn hàng của người dùng
-		return orderRepository.findAllByUsersIdAndStatus(userPrinciple.getId(), true).stream()
-				  .map(item -> orderMapper.toOrderResponse(item))
-				  .collect(Collectors.toList());
+		if(orderStatus.equals("ALL")) {
+			list = orderRepository.findAllByUsersIdAndStatus(userPrinciple.getId(),true,pageable).map(item -> orderMapper.toOrderResponse(item));
+		} else {
+			OrderStatus convertOrderStatus = OrderStatus.valueOf(orderStatus);
+			list = orderRepository.findAllByUsersIdAndStatusAndOrderStatus(userPrinciple.getId(),true,pageable,convertOrderStatus).map(item -> orderMapper.toOrderResponse(item));
+		}
+		return list;
 	}
 	
 	// chức năng update thông tin người dùng đang đăng nhập
@@ -205,7 +211,7 @@ public class UserService implements IUserService {
 		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
 		Users users = userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found"));
 		// check xem số điện thoại có bị trùng ko nếu trùng sẽ ném ra ngoại lên CustomException
-		if(userRepository.existsByPhone(userUpdate.getPhone()) && !userUpdate.getPhone().equals(userRepository.findById(userPrinciple.getId()).orElseThrow(()->new CustomException("user not found")).getPhone())) {
+		if (userRepository.existsByPhone(userUpdate.getPhone()) && !userUpdate.getPhone().equals(userRepository.findById(userPrinciple.getId()).orElseThrow(() -> new CustomException("user not found")).getPhone())) {
 			throw new CustomException("phone is exists");
 		}
 		// Cập nhật địa chỉ và số điện thoại của người dùng

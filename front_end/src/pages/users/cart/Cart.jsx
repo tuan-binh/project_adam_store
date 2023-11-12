@@ -65,6 +65,11 @@ function Cart() {
     dispatch(delete_clear_all());
   };
 
+  // handle next to check out
+  const handleCheckout = () => {
+    navigate("/checkout");
+  };
+
   useEffect(() => {
     dispatch(get_cart_user());
   }, []);
@@ -209,8 +214,9 @@ function Cart() {
             <div className="actions py-5">
               <Button
                 variant="contained"
+                disabled={user.cart.length === 0}
                 fullWidth
-                onClick={() => navigate("/checkout")}
+                onClick={handleCheckout}
               >
                 Checkout
               </Button>

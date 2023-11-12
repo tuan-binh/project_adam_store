@@ -7,6 +7,8 @@ import back_end.dto.request.UserUpdate;
 import back_end.dto.response.*;
 import back_end.exception.CustomException;
 import back_end.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 import javax.servlet.http.HttpSession;
@@ -22,7 +24,7 @@ public interface IUserService {
 	
 	List<ProductResponse> getFavourite(Authentication authentication) throws CustomException;
 	
-	List<OrderResponse> getOrders(Authentication authentication);
+	Page<OrderResponse> getOrders(Pageable pageable, Authentication authentication,String orderStatus);
 	
 	UserResponse updateInformation(UserUpdate userUpdate, Authentication authentication) throws CustomException;
 	

@@ -36,14 +36,12 @@ public class CategoryController {
 	
 	// chức năng thêm thể loại sản phẩm mới
 	@PostMapping
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<CategoryResponse> addNewCategory(@RequestBody CategoryRequest categoryRequest) throws CustomException {
 		return new ResponseEntity<>(categoryService.save(categoryRequest), HttpStatus.CREATED);
 	}
 	
 	// chức năng update thể loại sản phẩm theo id
 	@PutMapping("/{categoryId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest categoryRequest, @PathVariable Long categoryId) throws CustomException {
 		return new ResponseEntity<>(categoryService.update(categoryRequest,categoryId),HttpStatus.OK);
 	}
@@ -52,7 +50,6 @@ public class CategoryController {
 	// nếu nó là true thì sẽ là shop còn bán những sản phẩm thuộc thể loại đó
 	// nếu nó là false thì sẽ không cho tạo sản phẩm thuộc thể loại đó nữa
 	@PutMapping("/{categoryId}/status")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<CategoryResponse> changeStatusCategory(@PathVariable Long categoryId) throws CustomException {
 		return new ResponseEntity<>(categoryService.changeStatusCategory(categoryId), HttpStatus.OK);
 	}

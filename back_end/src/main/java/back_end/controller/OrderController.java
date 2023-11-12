@@ -6,6 +6,10 @@ import back_end.dto.response.OrderResponse;
 import back_end.exception.CustomException;
 import back_end.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +28,13 @@ public class OrderController {
 	@Autowired
 	private IOrderService orderService;
 	
+	@GetMapping("/admin")
+	public ResponseEntity<Page<OrderResponse>> getAllOrderByAdmin(@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+																					  @RequestParam(defaultValue = "ALL") String orderStatus,
+																					  @RequestParam(defaultValue = "") String search) {
+		return new ResponseEntity<>(orderService.getAllOrderByAdmin(pageable, orderStatus, search), HttpStatus.OK);
+	}
+	
 	// chức năng check out giỏ hàng của nguười dùng đang nhập
 	@PutMapping("/checkout")
 	public ResponseEntity<OrderResponse> checkoutOrder(@RequestBody CheckoutRequest checkoutRequest, Authentication authentication) throws CustomException {
@@ -32,8 +43,8 @@ public class OrderController {
 	
 	// chức năng lấy ra những sản phẩm có trong order ( hóa đơn ) một danh sách sản phẩm trong hóa đơn
 	@GetMapping("/{orderId}")
-	public ResponseEntity<List<OrderItemResponse>> getAllOrderItemByOrderId(@PathVariable Long orderId, Authentication authentication) throws CustomException {
-		return new ResponseEntity<>(orderService.getOrderItemByOrderId(orderId, authentication), HttpStatus.OK);
+	public ResponseEntity<List<OrderItemResponse>> getAllOrderItemByOrderId(@PathVariable Long orderId) throws CustomException {
+		return new ResponseEntity<>(orderService.getOrderItemByOrderId(orderId), HttpStatus.OK);
 	}
 	
 	// chức năng hủy đơn hàng đó chuyển nó về trạng thái CANCEL
@@ -44,14 +55,12 @@ public class OrderController {
 	
 	// chức năng chuyển trạng thái giao hàng ( chuyển trạng thái đơn hàng sang trạng thái giao hàng )
 	@PutMapping("/{orderId}/delivery")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<OrderResponse> deliveryOrder(@PathVariable Long orderId) throws CustomException {
 		return new ResponseEntity<>(orderService.deliveryOrder(orderId), HttpStatus.OK);
 	}
 	
 	// chức năng chuyển trạng thái thành công ( chuyển trạng thái đơn hàng sang SUCCESS thành công cũng như giao hàng thành công )
 	@PutMapping("/{orderId}/success")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<OrderResponse> successOrder(@PathVariable Long orderId) throws CustomException {
 		return new ResponseEntity<>(orderService.success(orderId), HttpStatus.OK);
 	}

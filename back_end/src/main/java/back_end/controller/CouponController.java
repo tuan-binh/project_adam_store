@@ -36,14 +36,12 @@ public class CouponController {
 	
 	// chức năng thêm thông tin phiếu giảm giá mới vào hệ thống
 	@PostMapping
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<CouponResponse> addNewCoupon(@RequestBody CouponRequest couponRequest) throws CustomException {
 		return new ResponseEntity<>(couponService.save(couponRequest), HttpStatus.CREATED);
 	}
 	
 	// chức năng update thông tin phiếu giảm giá theo id
 	@PutMapping("/{couponId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest couponRequest, @PathVariable Long couponId) throws CustomException {
 		return new ResponseEntity<>(couponService.update(couponRequest, couponId), HttpStatus.OK);
 	}
@@ -52,7 +50,6 @@ public class CouponController {
 	// nếu nó là true thì sẽ sử dụng được và có thể áp mã giảm giá đó
 	// nếu nó là false thì sẽ ẩn nó đi người dùng sẽ không thấy là ko thể áp mã giảm giá được
 	@PutMapping("/{couponId}/status")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<CouponResponse> changeStatus(@PathVariable Long couponId) throws CustomException {
 		return new ResponseEntity<>(couponService.changeStatusCoupon(couponId), HttpStatus.OK);
 	}

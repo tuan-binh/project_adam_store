@@ -3,6 +3,8 @@ import categorySlice from "./reducers/categorySlice";
 import colorSlice from "./reducers/colorSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import couponSlice from "./reducers/couponSlice";
+import orderAdminSlice from "./reducers/orderAdminSlice";
+import orderUserSlice from "./reducers/orderUserSlice";
 import productSlice from "./reducers/productSlice";
 import sizeSlice from "./reducers/sizeSlice";
 import userSlice from "./reducers/userSlice";
@@ -16,6 +18,8 @@ const store = configureStore({
     color: colorSlice,
     size: sizeSlice,
     user: userSlice,
+    orderUser: orderUserSlice,
+    orderAdmin: orderAdminSlice,
   },
 });
 

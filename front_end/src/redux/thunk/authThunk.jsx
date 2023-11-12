@@ -11,7 +11,7 @@ export const post_login = (formLogin) => {
       const data = response.data;
       const cookie = new Cookies();
       cookie.set("token", data.token, { path: "/" });
-      cookie.set("roles", data.roles, { path: "/" });
+      // cookie.set("roles", data.roles, { path: "/" });
       localStorage.setItem("user", JSON.stringify(data));
       dispatch(setFavourite(data.favourite));
       dispatch(setUserLogin(data));
@@ -38,7 +38,6 @@ export const handle_logout = () => {
   return async function handle_logout_thunk(dispatch) {
     const cookie = new Cookies();
     cookie.remove("token", { path: "/" });
-    cookie.remove("roles", { path: "/" });
     localStorage.removeItem("user");
     dispatch(resetUser());
   };

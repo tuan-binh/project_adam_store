@@ -1,18 +1,18 @@
-import { GET_ALL_PRODUCT } from "../api/service/productService";
+import { GET_ALL_ORDER_ADMIN } from "../api/service/orderAdminService";
 import { createSlice } from "@reduxjs/toolkit";
 
-const productSlice = createSlice({
-  name: "product",
+const orderAdminSlice = createSlice({
+  name: "orderAdmin",
   initialState: {
     status: "",
-    products: [],
+    orders: [],
     totalPages: 1,
     size: 1,
     current: 1,
   },
   reducers: {
-    updateProduct: (state, action) => {
-      state.products = state.products.map((item) => {
+    updateOrderAdmin: (state, action) => {
+      state.orders = state.orders.map((item) => {
         if (item.id === action.payload.id) {
           return (item = action.payload);
         } else {
@@ -26,12 +26,12 @@ const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(GET_ALL_PRODUCT.pending, (state) => {
+      .addCase(GET_ALL_ORDER_ADMIN.pending, (state) => {
         state.status = "pending";
       })
-      .addCase(GET_ALL_PRODUCT.fulfilled, (state, action) => {
+      .addCase(GET_ALL_ORDER_ADMIN.fulfilled, (state, action) => {
         state.status = "";
-        state.products = action.payload.content;
+        state.orders = action.payload.content;
         state.totalPages = action.payload.totalPages;
         state.size = action.payload.size;
         state.current = action.payload.number + 1;
@@ -39,5 +39,5 @@ const productSlice = createSlice({
   },
 });
 
-export const { changeCurrentPage, updateProduct } = productSlice.actions;
-export default productSlice.reducer;
+export const { updateOrderAdmin, changeCurrentPage } = orderAdminSlice.actions;
+export default orderAdminSlice.reducer;

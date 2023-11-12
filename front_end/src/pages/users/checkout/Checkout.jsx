@@ -11,11 +11,14 @@ import Swal from "sweetalert2";
 import TextField from "@mui/material/TextField";
 import TurnRightIcon from "@mui/icons-material/TurnRight";
 import { get_cart_user } from "../../../redux/thunk/userThunk";
+import { put_check_out_user } from "../../../redux/thunk/orderUserThunk";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { validateBlank } from "../../../utils/ValidateForm";
 
 function Checkout() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const coupons = useSelector(COUPON);
@@ -76,7 +79,7 @@ function Checkout() {
   const handleOrderCartUser = () => {
     const formCheckout = {};
     if (coupon) {
-      formCheckout.coupon = coupon.id;
+      formCheckout.couponId = coupon.id;
     }
     if (optionOrder === "your_address") {
       if (!address || !phone) {
@@ -108,13 +111,27 @@ function Checkout() {
       formCheckout.phone = phone;
     }
     // dispatch order user
+    dispatch(put_check_out_user(formCheckout)).then((resp) => {
+      if (resp === true) {
+        navigate("/orders");
+      } else {
+        Swal.fire({
+          title: "Good job!",
+          text: resp,
+          icon: "error",
+          showCloseButton: true,
+          cancelButtonColor: "#27ae60",
+          cancelButtonText: "OK",
+        });
+      }
+    });
     resetError();
   };
 
   useEffect(() => {
     resetError();
     dispatch(get_cart_user());
-    dispatch(GET_ALL_COUPON(""));
+    dispatch(GET_ALL_COUPON(search));
   }, [search]);
 
   return (
@@ -209,7 +226,7 @@ function Checkout() {
                 onChange={handleChangeSearch}
               />
               {search && (
-                <div className="absolute w-10/12 right-1/2 translate-x-1/2 mt-2 p-3 shadow-xl bg-white rounded-lg">
+                <div className="absolute w-10/12 right-1/2 translate-x-1/2 mt-2 p-3 shadow-xl bg-white rounded-lg flex flex-col gap-3">
                   {coupons.coupons.map((item) => {
                     if (item.status) {
                       return (

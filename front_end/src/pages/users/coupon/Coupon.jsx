@@ -38,7 +38,9 @@ function Coupon() {
         <div className="body flex gap-4 flex-wrap pt-10">
           {coupons.coupons.length > 0 ? (
             coupons.coupons.map((item) => {
-              return <ItemCoupon key={item.id} item={item} />;
+              if (item.status) {
+                return <ItemCoupon key={item.id} item={item} />;
+              }
             })
           ) : (
             <div className="flex justify-center w-full text-3xl items-center h-40">

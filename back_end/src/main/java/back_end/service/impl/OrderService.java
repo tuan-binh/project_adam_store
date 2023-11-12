@@ -14,6 +14,8 @@ import back_end.security.user_principal.UserPrinciple;
 import back_end.service.IOrderService;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,33 @@ public class OrderService implements IOrderService {
 	private IProductRepository productRepository;
 	@Autowired
 	private OrderMapper orderMapper;
+	
+	
+	// chức năng lấy tất cả thông tin order với quyển của admin
+	@Override
+	public Page<OrderResponse> getAllOrderByAdmin(Pageable pageable, String orderStatus, String search) {
+		Page<OrderResponse> list;
+		
+		if (orderStatus.equals("ALL")) {
+			if (search.isEmpty()) {
+				list = orderRepository.findAllByStatus(true, pageable)
+						  .map(item -> orderMapper.toOrderResponse(item));
+			} else {
+				list = orderRepository.findAllByStatusAndCustomerContainingIgnoreCase(true, search, pageable)
+						  .map(item -> orderMapper.toOrderResponse(item));
+			}
+		} else {
+			OrderStatus convertOrderStatus = OrderStatus.valueOf(orderStatus);
+			if (search.isEmpty()) {
+				list = orderRepository.findAllByStatusAndOrderStatus(true, convertOrderStatus, pageable)
+						  .map(item -> orderMapper.toOrderResponse(item));
+			} else {
+				list = orderRepository.findAllByStatusAndOrderStatusAndCustomerContainingIgnoreCase(true, convertOrderStatus, search, pageable)
+						  .map(item -> orderMapper.toOrderResponse(item));
+			}
+		}
+		return list;
+	}
 	
 	// chức năng check out giỏ hàng của nguười dùng đang nhập
 	@Override
@@ -128,23 +157,16 @@ public class OrderService implements IOrderService {
 	
 	// chức năng lấy ra những sản phẩm có trong order ( hóa đơn ) một danh sách sản phẩm trong hóa đơn
 	@Override
-	public List<OrderItemResponse> getOrderItemByOrderId(Long orderId, Authentication authentication) throws CustomException {
-		// Lấy thông tin người dùng từ đối tượng Authentication
-		UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
-		
+	public List<OrderItemResponse> getOrderItemByOrderId(Long orderId) throws CustomException {
 		// Tìm kiếm đơn hàng dựa trên ID đơn hàng
 		Orders orders = orderRepository.findById(orderId).orElseThrow(() -> new CustomException("order not found"));
 		
-		// Kiểm tra xem người dùng có quyền xem chi tiết đơn hàng này hay không
-		if (Objects.equals(orders.getUsers().getId(), userPrinciple.getId())) {
-			// Nếu có, lấy danh sách chi tiết đơn hàng và ánh xạ sang OrderItemResponse
-			return orderDetailRepository.findAllByOrdersId(orderId).stream()
-					  .map(item -> orderMapper.toOrderItem(item))
-					  .collect(Collectors.toList());
-		}
 		
-		// Nếu không có quyền, ném ngoại lệ tùy chỉnh
-		throw new CustomException("you can't watch this order");
+		// Nếu có, lấy danh sách chi tiết đơn hàng và ánh xạ sang OrderItemResponse
+		return orderDetailRepository.findAllByOrdersId(orderId).stream()
+				  .map(item -> orderMapper.toOrderItem(item))
+				  .collect(Collectors.toList());
+		
 	}
 	
 	// chức năng hủy đơn hàng đó chuyển nó về trạng thái CANCEL

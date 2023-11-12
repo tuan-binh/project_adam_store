@@ -10,6 +10,10 @@ import back_end.exception.CustomException;
 import back_end.model.Product;
 import back_end.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -41,8 +45,10 @@ public class UserController {
 	
 	// chức năng lấy thông tin danh sách thông tin orders của người dùng đang đăng nhập
 	@GetMapping("/orders")
-	public ResponseEntity<List<OrderResponse>> getOrders(Authentication authentication) {
-		return new ResponseEntity<>(userService.getOrders(authentication), HttpStatus.OK);
+	public ResponseEntity<Page<OrderResponse>> getOrders(@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+																		  Authentication authentication,
+																		  @RequestParam(defaultValue = "ALL") String orderStatus) {
+		return new ResponseEntity<>(userService.getOrders(pageable,authentication,orderStatus), HttpStatus.OK);
 	}
 	
 	// chức năng update thông tin người dùng đang đăng nhập

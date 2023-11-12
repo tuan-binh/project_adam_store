@@ -34,14 +34,12 @@ public class ColorController {
 	
 	// chức năng thêm thông tin màu mới vào hệ thống
 	@PostMapping
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ColorResponse> addNewColor(@RequestBody ColorRequest colorRequest) throws CustomException {
 		return new ResponseEntity<>(colorService.save(colorRequest),HttpStatus.CREATED);
 	}
 	
 	// chức năng update thông tin màu theo id
 	@PutMapping("/{colorId}")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ColorResponse> updateColor(@RequestBody ColorRequest colorRequest,@PathVariable Long colorId) throws CustomException {
 		return new ResponseEntity<>(colorService.update(colorRequest,colorId),HttpStatus.OK);
 	}
@@ -50,7 +48,6 @@ public class ColorController {
 	// nếu nó là true thì sẽ là shop còn bán những sản phẩm thuộc màu đó đó
 	// nếu nó là false thì sẽ không cho tạo sản phẩm thuộc màu đó nữa
 	@PutMapping("/{colorId}/status")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')") // chỉ tài khoản admin mới được dùng API này
 	public ResponseEntity<ColorResponse> changeStatusColor(@PathVariable Long colorId) throws CustomException {
 		return new ResponseEntity<>(colorService.changeStatusColor(colorId),HttpStatus.OK);
 	}
