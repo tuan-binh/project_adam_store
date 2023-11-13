@@ -1,7 +1,9 @@
 package back_end.service;
 
+import back_end.dto.response.ResultResponse;
+
 public interface IDashboardService {
 
-	Integer getTotalUser();
+	ResultResponse getResultInDashboard();
 
 }
