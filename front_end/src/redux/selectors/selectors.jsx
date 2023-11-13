@@ -15,3 +15,5 @@ export const USER = (state) => state.user;
 export const ORDER_USER = (state) => state.orderUser;
 
 export const ORDER_ADMIN = (state) => state.orderAdmin;
+
+export const USERS_ADMIN = (state) => state.userAdmin;

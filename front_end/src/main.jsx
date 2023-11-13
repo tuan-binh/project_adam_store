@@ -1,4 +1,5 @@
 import "./index.css";
+import "toastify-js/src/toastify.css";
 
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";

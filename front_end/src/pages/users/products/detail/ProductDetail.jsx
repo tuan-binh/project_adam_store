@@ -25,6 +25,7 @@ import { Cookies } from "react-cookie";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PropertiesProduct from "../../../../components/modal/PropertiesProduct";
 import Swal from "sweetalert2";
+import Toastify from "toastify-js";
 import { USER } from "../../../../redux/selectors/selectors";
 import instance from "../../../../redux/api/axios";
 
@@ -77,8 +78,26 @@ function ProductDetail() {
     let check = user.favourite.includes(idProduct);
     if (check) {
       dispatch(delete_product_in_favourite(idProduct));
+      Toastify({
+        text: "Đã xóa khỏi danh sách yêu thích",
+        className: "info",
+        style: {
+          backgroundColor: "#ff7474",
+          backgroundImage: "linear-gradient(315deg, #ff7474 0%, #FF0000 99%)",
+        },
+        position: "center",
+      }).showToast();
     } else {
       dispatch(post_add_product_to_favourite(idProduct));
+      Toastify({
+        text: "Đã thêm vào danh sách yêu thích",
+        className: "info",
+        style: {
+          backgroundColor: "#0093E9",
+          backgroundImage: "linear-gradient(160deg, #0093E9 0%, #80D0C7 100%)",
+        },
+        position: "center",
+      }).showToast();
     }
   };
 

@@ -14,6 +14,7 @@ import ManageCoupon from "../admin/coupon/ManageCoupon";
 import ManageOrders from "../admin/orders/ManageOrders";
 import ManageProduct from "../admin/products/ManageProduct";
 import ManageSize from "../admin/products/ManageSize";
+import ManageUsers from "../admin/users/ManageUsers";
 import ProductDetail from "../users/products/detail/ProductDetail";
 import Products from "../users/products/Products";
 import RevenueOrders from "../admin/revenue/RevenueOrders";
@@ -31,7 +32,7 @@ function Routers() {
         {/* home page */}
         <Route index Component={UserHome}></Route>
         {/* show list product */}
-        <Route path="/products" Component={Products}></Route>
+        <Route path="/products/" Component={Products}></Route>
         {/* show product detail */}
         <Route path="/products/detail/:id" Component={ProductDetail}></Route>
         {/* show coupon */}
@@ -63,6 +64,8 @@ function Routers() {
         <Route path="/admin/size" Component={ManageSize}></Route>
         {/* coupon */}
         <Route path="/admin/coupon" Component={ManageCoupon}></Route>
+        {/* users */}
+        <Route path="/admin/users" Component={ManageUsers}></Route>
         {/* revenue */}
         <Route path="/admin/revenue/orders" Component={RevenueOrders}></Route>
         <Route

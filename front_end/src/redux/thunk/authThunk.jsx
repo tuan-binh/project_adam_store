@@ -1,6 +1,6 @@
 import { POST_LOGIN, POST_REGISTER } from "../api/service/authService";
+import { resetData, setFavourite, setUserLogin } from "../reducers/userSlice";
 import { resetUser, setUser } from "../reducers/authSlice";
-import { setFavourite, setUserLogin } from "../reducers/userSlice";
 
 import { Cookies } from "react-cookie";
 
@@ -40,5 +40,6 @@ export const handle_logout = () => {
     cookie.remove("token", { path: "/" });
     localStorage.removeItem("user");
     dispatch(resetUser());
+    dispatch(resetData());
   };
 };

@@ -63,6 +63,7 @@ function UserHome() {
                       return (
                         <div
                           key={item.id}
+                          data-aos="fade-up"
                           className="h-40 relative rounded-lg bg-fixed bg-no-repeat bg-cover bg-center"
                           style={{ backgroundImage: 'url("banner.webp")' }}
                         >

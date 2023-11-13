@@ -2,12 +2,6 @@ import { Cookies } from "react-cookie";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import instance from "../axios";
 
-const configHeader = {
-  headers: {
-    Authorization: `Bearer ${new Cookies().get("token")}`,
-  },
-};
-
 export const GET_ALL_SIZE = createAsyncThunk(
   "size/GET_ALL_SIZE",
   async (search) => {
@@ -17,16 +11,26 @@ export const GET_ALL_SIZE = createAsyncThunk(
 );
 
 export const POST_ADD_SIZE = async (formSize) => {
-  let resp = await instance.post("/api/size", formSize, configHeader);
+  let resp = await instance.post("/api/size", formSize, {
+    headers: { Authorization: `Bearer ${new Cookies().get("token")}` },
+  });
   return resp;
 };
 
 export const PUT_UPDATE_SIZE = async ({ formSize, id }) => {
-  let resp = await instance.put(`/api/size/${id}`, formSize, configHeader);
+  let resp = await instance.put(`/api/size/${id}`, formSize, {
+    headers: { Authorization: `Bearer ${new Cookies().get("token")}` },
+  });
   return resp;
 };
 
 export const PUT_STATUS_SIZE = async (id) => {
-  let resp = await instance.put(`/api/size/${id}/status`, {}, configHeader);
+  let resp = await instance.put(
+    `/api/size/${id}/status`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${new Cookies().get("token")}` },
+    }
+  );
   return resp;
 };

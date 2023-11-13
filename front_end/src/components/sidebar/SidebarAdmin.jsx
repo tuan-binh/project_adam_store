@@ -10,6 +10,7 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -43,6 +44,12 @@ function SidebarAdmin({ toggle, handleToggleNavbar, expanded, handleChange }) {
     },
     {
       id: 4,
+      icon: <GroupsOutlinedIcon className="nav_icon" />,
+      subMenu: [{ id: 1, path: "/admin/users", text: "Users" }],
+      text: "User",
+    },
+    {
+      id: 5,
       icon: <BarChartOutlinedIcon className="nav_icon" />,
       subMenu: [
         { id: 1, path: "/admin/revenue/orders", text: "Revenue Orders" },

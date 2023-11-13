@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
+import Swal from "sweetalert2";
 import TextField from "@mui/material/TextField";
 import { post_register } from "../../redux/thunk/authThunk";
 import { useDispatch } from "react-redux";
@@ -42,7 +43,16 @@ function UserRegister() {
     }
     dispatch(post_register(formRegister)).then((resp) => {
       if (resp === true) {
-        navigate("/login");
+        Swal.fire({
+          title: "Good job!",
+          text: "Đăng ký thành công!",
+          icon: "success",
+          showCloseButton: true,
+          cancelButtonColor: "#27ae60",
+          cancelButtonText: "OK",
+        }).then(() => {
+          navigate("/login");
+        });
       } else {
         setErrorEmail(resp);
       }

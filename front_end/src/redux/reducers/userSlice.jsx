@@ -54,6 +54,13 @@ const userSlice = createSlice({
     clearCart: (state) => {
       state.cart = [];
     },
+    resetData: (state) => {
+      state.status = "";
+      state.favourite = [];
+      state.cart = [];
+      state.users = [];
+      state.userLogin = {};
+    },
   },
 });
 
@@ -67,5 +74,6 @@ export const {
   changeQuantity,
   removeCartItem,
   clearCart,
+  resetData,
 } = userSlice.actions;
 export default userSlice.reducer;
