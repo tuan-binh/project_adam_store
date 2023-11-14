@@ -30,8 +30,8 @@ function IndexAdminHome() {
           style={{
             padding: "24px",
             background: "#dfe6e9",
-            height: "calc( 100vh - 55px )",
-            maxHeight: "calc( 100vh - 55px )",
+            height: "calc( 100vh - 45px )",
+            maxHeight: "calc( 100vh - 45px )",
             overflowX: "hidden",
             overflowY: "auto",
           }}

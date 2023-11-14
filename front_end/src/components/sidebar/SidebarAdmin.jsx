@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -47,15 +46,6 @@ function SidebarAdmin({ toggle, handleToggleNavbar, expanded, handleChange }) {
       icon: <GroupsOutlinedIcon className="nav_icon" />,
       subMenu: [{ id: 1, path: "/admin/users", text: "Users" }],
       text: "User",
-    },
-    {
-      id: 5,
-      icon: <BarChartOutlinedIcon className="nav_icon" />,
-      subMenu: [
-        { id: 1, path: "/admin/revenue/orders", text: "Revenue Orders" },
-        { id: 1, path: "/admin/revenue/products", text: "Revenue Products" },
-      ],
-      text: "Revenue",
     },
   ];
 

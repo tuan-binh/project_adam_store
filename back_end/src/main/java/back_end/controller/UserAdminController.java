@@ -21,7 +21,7 @@ public class UserAdminController {
 	private IUserAdminService userAdminService;
 	
 	@GetMapping("/users")
-	public ResponseEntity<Page<UserResponse>> getAllUserByAdmin(@PageableDefault(page = 0,size = 2,sort = "id",direction = Sort.Direction.ASC)Pageable pageable,
+	public ResponseEntity<Page<UserResponse>> getAllUserByAdmin(@PageableDefault(page = 0,size = 2,sort = "id",direction = Sort.Direction.DESC)Pageable pageable,
 																					@RequestParam(defaultValue = "") String search) {
 		return new ResponseEntity<>(userAdminService.getAllUserByAdmin(pageable,search), HttpStatus.OK);
 	}

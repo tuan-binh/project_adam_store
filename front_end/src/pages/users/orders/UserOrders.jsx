@@ -14,6 +14,7 @@ import { ORDER_USER } from "../../../redux/selectors/selectors";
 import Pagination from "@mui/material/Pagination";
 import Select from "@mui/material/Select";
 import ShowOrderDetail from "../../../components/modal/ShowOrderDetail";
+import ShowRatingOrder from "../../../components/modal/ShowRatingOrder";
 import StarIcon from "@mui/icons-material/Star";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -47,7 +48,14 @@ function UserOrders() {
   };
   const handleCloseAddRating = () => setOpenAddRating(false);
 
-  // handle update rating
+  // handle show rating
+  const [rating, setRating] = useState(null);
+  const [openShowRating, setOpenShowRating] = useState(false);
+  const handleOpenShowRating = (item) => {
+    setOpenShowRating(true);
+    setRating(item);
+  };
+  const handleCloseShowRating = () => setOpenShowRating(false);
 
   // handle filter by orderStatus
   const [filter, setFilter] = useState("ALL");
@@ -235,7 +243,11 @@ function UserOrders() {
                               </Button>
                             ) : (
                               item.rating && (
-                                <>
+                                <div
+                                  onClick={() =>
+                                    handleOpenShowRating(item.rating)
+                                  }
+                                >
                                   {item.rating.rate === 1 ? <StarIcon /> : ""}
                                   {item.rating.rate === 2 ? (
                                     <>
@@ -275,7 +287,7 @@ function UserOrders() {
                                   ) : (
                                     ""
                                   )}
-                                </>
+                                </div>
                               )
                             )}
                             {item.orderStatus === "CANCEL" ? (
@@ -323,6 +335,13 @@ function UserOrders() {
           handleCloseAddRating={handleCloseAddRating}
           orderId={orderId}
           handleLoadOrder={handleLoadOrder}
+        />
+      )}
+      {openShowRating && (
+        <ShowRatingOrder
+          openShowRating={openShowRating}
+          handleCloseShowRating={handleCloseShowRating}
+          rating={rating}
         />
       )}
     </>

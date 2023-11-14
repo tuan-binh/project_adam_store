@@ -19,6 +19,8 @@ public class UserAdminService implements IUserAdminService {
 	@Autowired
 	private IUserRepository userRepository;
 	@Autowired
+	private IRoleService roleService;
+	@Autowired
 	private UserMapper userMapper;
 	
 	@Override

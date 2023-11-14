@@ -17,8 +17,6 @@ import ManageSize from "../admin/products/ManageSize";
 import ManageUsers from "../admin/users/ManageUsers";
 import ProductDetail from "../users/products/detail/ProductDetail";
 import Products from "../users/products/Products";
-import RevenueOrders from "../admin/revenue/RevenueOrders";
-import RevenueProducts from "../admin/revenue/RevenueProducts";
 import UserHome from "../users/home/UserHome";
 import UserLogin from "../login_register/UserLogin";
 import UserOrders from "../users/orders/UserOrders";
@@ -66,12 +64,6 @@ function Routers() {
         <Route path="/admin/coupon" Component={ManageCoupon}></Route>
         {/* users */}
         <Route path="/admin/users" Component={ManageUsers}></Route>
-        {/* revenue */}
-        <Route path="/admin/revenue/orders" Component={RevenueOrders}></Route>
-        <Route
-          path="/admin/revenue/products"
-          Component={RevenueProducts}
-        ></Route>
       </Route>
     </Routes>
   );

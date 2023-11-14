@@ -4,7 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 function Calender() {
   return (
-    <div style={{ background: "#fff" }}>
+    <div style={{ background: "#fff" }} className="rounded-lg shadow-xl">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar sx={{ width: "100%" }} />
       </LocalizationProvider>

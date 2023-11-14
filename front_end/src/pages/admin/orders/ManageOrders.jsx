@@ -20,6 +20,7 @@ import Pagination from "@mui/material/Pagination";
 import Paper from "@mui/material/Paper";
 import Select from "@mui/material/Select";
 import ShowOrderDetail from "../../../components/modal/ShowOrderDetail";
+import ShowRatingOrder from "../../../components/modal/ShowRatingOrder";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -43,6 +44,17 @@ function ManageOrders() {
     setOpenOrderDetail(true);
   };
   const handleCloseOrderDetail = () => setOpenOrderDetail(false);
+
+  // handle show rating
+  const [rating, setRating] = useState(null);
+  const [openShowRating, setOpenShowRating] = useState(false);
+  const handleOpenShowRating = (item) => {
+    setOpenShowRating(true);
+    setRating(item);
+  };
+  const handleCloseShowRating = () => {
+    setOpenShowRating(false);
+  };
 
   // handle filter by orderStatus
   const [filter, setFilter] = useState("ALL");
@@ -236,7 +248,10 @@ function ManageOrders() {
                             ""
                           )}
                           {item.orderStatus === "SUCCESS" ? (
-                            <Tooltip title="success">
+                            <Tooltip
+                              title="success"
+                              onClick={() => handleOpenShowRating(item.rating)}
+                            >
                               <CheckCircleIcon color="success" />
                             </Tooltip>
                           ) : (
@@ -274,6 +289,13 @@ function ManageOrders() {
           openOrderDetail={openOrderDetail}
           handleCloseOrderDetail={handleCloseOrderDetail}
           orderId={orderId}
+        />
+      )}
+      {openShowRating && (
+        <ShowRatingOrder
+          openShowRating={openShowRating}
+          handleCloseShowRating={handleCloseShowRating}
+          rating={rating}
         />
       )}
     </>
