@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 // lấy http://localhost:8080 sẽ lấy phần trong RequestParam
@@ -61,6 +62,11 @@ public class UserController {
 	@PutMapping("/password")
 	public ResponseEntity<UserResponse> changePassword(@RequestBody UserPassword userPassword, Authentication authentication) throws CustomException {
 		return new ResponseEntity<>(userService.changePassword(userPassword, authentication), HttpStatus.OK);
+	}
+	
+	@PutMapping("/forget/password")
+	public ResponseEntity<String> forgetYourPassword(@RequestParam(defaultValue = "") String email) throws CustomException, MessagingException {
+		return new ResponseEntity<>(userService.forgerPassword(email),HttpStatus.OK);
 	}
 	
 }

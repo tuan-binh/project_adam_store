@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -29,5 +30,7 @@ public interface IUserService {
 	UserResponse updateInformation(UserUpdate userUpdate, Authentication authentication) throws CustomException;
 	
 	UserResponse changePassword(UserPassword userPassword, Authentication authentication) throws CustomException;
+	
+	String forgerPassword(String email) throws CustomException, MessagingException;
 	
 }
