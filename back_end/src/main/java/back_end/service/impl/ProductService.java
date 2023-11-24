@@ -173,11 +173,19 @@ public class ProductService implements IProductService {
 		// Tìm kiếm sản phẩm theo ID và thực hiện thêm chi tiết sản phẩm nếu tìm thấy, nếu không ném CustomException
 		Optional<Product> optionalProduct = productRepository.findById(id);
 		if (optionalProduct.isPresent()) {
-			ProductDetail productDetail = productDetailMapper.toEntity(productDetailRequest);
-			productDetail.setProduct(optionalProduct.get());
 			
-			// Lưu chi tiết sản phẩm và trả về ProductResponse sau khi thêm mới
-			productDetailRepository.save(productDetail);
+			ProductDetail checkProductDetail = productDetailRepository.findByProductIdAndColorIdAndSizeId(id,productDetailRequest.getColorId(),productDetailRequest.getSizeId());
+			if(checkProductDetail == null) {
+				ProductDetail productDetail = productDetailMapper.toEntity(productDetailRequest);
+				productDetail.setProduct(optionalProduct.get());
+				productDetailRepository.save(productDetail);
+			} else {
+				checkProductDetail.setStock(checkProductDetail.getStock() + productDetailRequest.getStock());
+				if(checkProductDetail.getPrice() < productDetailRequest.getPrice()) {
+					checkProductDetail.setPrice(productDetailRequest.getPrice());
+				}
+				productDetailRepository.save(checkProductDetail);
+			}
 			return productMapper.toResponse(productRepository.findById(id).orElseThrow(() -> new CustomException("product not found")));
 		}
 		throw new CustomException("product not found");
