@@ -170,40 +170,58 @@ function Checkout() {
             </div>
           </div>
           <div className="body pt-20 flex flex-col gap-5">
-            <TextField
-              error={errorCustomer}
-              label={errorCustomer ? errorCustomer : "Customer"}
-              variant="outlined"
-              value={customer}
-              InputProps={{
-                readOnly: true,
-              }}
-              onChange={handleChangeCustomer}
-              fullWidth
-            />
-            <TextField
-              error={errorAddress}
-              label={errorAddress ? errorAddress : "Address"}
-              variant="outlined"
-              value={address}
-              InputProps={{
-                readOnly: optionOrder == "your_address",
-              }}
-              onChange={handleChangeAddress}
-              fullWidth
-            />
-            <TextField
-              error={errorPhone}
-              label={errorPhone ? errorPhone : "Phone"}
-              variant="outlined"
-              value={phone}
-              InputProps={{
-                readOnly: optionOrder == "your_address",
-              }}
-              type="number"
-              onChange={handleChangePhone}
-              fullWidth
-            />
+            <div className="form_group-input flex flex-col gap-5">
+              <TextField
+                error={errorCustomer}
+                label={errorCustomer ? errorCustomer : "Customer"}
+                variant="outlined"
+                value={customer}
+                InputProps={{
+                  readOnly: true,
+                }}
+                onChange={handleChangeCustomer}
+                fullWidth
+              />
+              <TextField
+                error={errorAddress}
+                label={errorAddress ? errorAddress : "Address"}
+                variant="outlined"
+                value={address}
+                InputProps={{
+                  readOnly: optionOrder == "your_address",
+                }}
+                onChange={handleChangeAddress}
+                fullWidth
+              />
+              <TextField
+                error={errorPhone}
+                label={errorPhone ? errorPhone : "Phone"}
+                variant="outlined"
+                value={phone}
+                InputProps={{
+                  readOnly: optionOrder == "your_address",
+                }}
+                type="number"
+                onChange={handleChangePhone}
+                fullWidth
+              />
+            </div>
+            <div className="wrapper flex">
+              <div className="card flex-1">
+                <input className="input" type="radio" name="card" value="basic" />
+                <span className="check"></span>
+                <label className="label__select">
+                  <div className="title uppercase">Thanh toán khi nhận hàng</div>
+                </label>
+              </div>
+              <div className="card flex-1">
+                <input className="input" type="radio" name="card" value="standart" />
+                <span className="check"></span>
+                <label className="label__select">
+                  <div className="title uppercase">Thanh toán qua ngân hàng</div>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
         <div className="flex-1 flex flex-col gap-5 ">

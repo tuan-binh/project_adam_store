@@ -1,13 +1,4 @@
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useEffect, useState } from "react";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -37,22 +28,13 @@ function RevenueOrders() {
   }, [yearValue]);
 
   return (
-    <div
-      className="bg-white pb-20 rounded-lg shadow-xl"
-      style={{ height: "650px" }}
-    >
+    <div className="bg-white pb-20 rounded-lg shadow-xl" style={{ height: "650px" }}>
       <div className="flex justify-between items-center px-7">
-        <h1 className="text-center p-5 text-2xl uppercase">
-          báo cáo orders hàng tháng theo năm
-        </h1>
+        <h1 className="text-center p-5 text-2xl uppercase">báo cáo orders hàng tháng theo năm</h1>
         <div>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DatePicker"]}>
-              <DatePicker
-                label={yearValue}
-                views={["year"]}
-                onChange={handleChangeYearValue}
-              />
+              <DatePicker label={yearValue} views={["year"]} onChange={handleChangeYearValue} />
             </DemoContainer>
           </LocalizationProvider>
         </div>
@@ -73,7 +55,6 @@ function RevenueOrders() {
           <Tooltip />
           <Legend />
           <Bar dataKey="success" fill="#82ca9d" />
-          <Bar dataKey="cancel" fill="#e74c3c" />
         </BarChart>
       </ResponsiveContainer>
     </div>

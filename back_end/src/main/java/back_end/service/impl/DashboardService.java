@@ -84,14 +84,10 @@ public class DashboardService implements IDashboardService {
 		List<RevenueOrders> list = new ArrayList<>();
 		for (int i = 1; i <= 12; i++) {
 			Integer success = orderRepository.getCountOrderByOrderStatus(year, i, OrderStatus.SUCCESS);
-			Integer cancel = orderRepository.getCountOrderByOrderStatus(year, i, OrderStatus.CANCEL);
 			if (success == null) {
 				success = 0;
 			}
-			if (cancel == null) {
-				cancel = 0;
-			}
-			list.add(RevenueOrders.builder().month(getMonthByIndex(i)).success(success).cancel(cancel).build());
+			list.add(RevenueOrders.builder().month(getMonthByIndex(i)).success(success).build());
 		}
 		return list;
 	}

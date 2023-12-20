@@ -13,6 +13,5 @@ public class RevenueOrders {
 	
 	private String month;
 	private int success;
-	private int cancel;
 	
 }
