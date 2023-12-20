@@ -12,7 +12,6 @@ import back_end.model.Orders;
 import back_end.repository.*;
 import back_end.security.user_principal.UserPrinciple;
 import back_end.service.IOrderService;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -119,7 +118,7 @@ public class OrderService implements IOrderService {
 				orders.setPhone(userPrinciple.getPhone());
 			} else {
 				orders.setAddress(checkoutRequest.getAddress());
-				orders.setCustomer(checkoutRequest.getCustomer());
+				orders.setCustomer(userPrinciple.getFullName());
 				orders.setPhone(checkoutRequest.getPhone());
 			}
 			

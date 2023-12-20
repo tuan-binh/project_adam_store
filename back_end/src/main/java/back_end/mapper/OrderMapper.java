@@ -30,6 +30,7 @@ public class OrderMapper {
 	public OrderResponse toOrderResponse(Orders orders) {
 		return OrderResponse.builder()
 				  .id(orders.getId())
+				  .users(orders.getUsers())
 				  .orderStatus(orders.getOrderStatus())
 				  .time(orders.getTime())
 				  .address(orders.getAddress())

@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 public class CheckoutRequest {
 	private Long couponId = null;
 	private String address = null;
-	private String customer = null;
 	private String phone = null;
 }

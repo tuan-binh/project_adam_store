@@ -75,9 +75,7 @@ function UserOrders() {
 
   // handle load order
   const handleLoadOrder = () => {
-    dispatch(
-      GET_ALL_ORDER_USER({ orderStatus: filter, page: orders.current - 1 })
-    );
+    dispatch(GET_ALL_ORDER_USER({ orderStatus: filter, page: orders.current - 1 }));
   };
 
   useEffect(() => {
@@ -91,30 +89,28 @@ function UserOrders() {
           <h1 className="text-center uppercase text-3xl pb-5">Your Order</h1>
         </div>
         <div className="body">
+          <div className="filter w-full flex justify-end">
+            <div className="w-52 py-5">
+              <FormControl fullWidth size="small">
+                <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={filter}
+                  label="Filter"
+                  onChange={handleFilterOrder}
+                >
+                  <MenuItem value={"ALL"}>ALL</MenuItem>
+                  <MenuItem value={"PREPARE"}>PREPARE</MenuItem>
+                  <MenuItem value={"DELIVERY"}>DELIVERY</MenuItem>
+                  <MenuItem value={"SUCCESS"}>SUCCESS</MenuItem>
+                  <MenuItem value={"CANCEL"}>CANCEL</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </div>
           {orders.orders.length > 0 ? (
             <>
-              <div className="filter w-full flex justify-end">
-                <div className="w-52 py-5">
-                  <FormControl fullWidth size="small">
-                    <InputLabel id="demo-simple-select-label">
-                      Filter
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={filter}
-                      label="Filter"
-                      onChange={handleFilterOrder}
-                    >
-                      <MenuItem value={"ALL"}>ALL</MenuItem>
-                      <MenuItem value={"PREPARE"}>PREPARE</MenuItem>
-                      <MenuItem value={"DELIVERY"}>DELIVERY</MenuItem>
-                      <MenuItem value={"SUCCESS"}>SUCCESS</MenuItem>
-                      <MenuItem value={"CANCEL"}>CANCEL</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-              </div>
               <div className="table w-full">
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead className="bg-slate-200">
@@ -140,86 +136,36 @@ function UserOrders() {
                           }}
                           className="hover:bg-slate-50 hover:cursor-pointer transition-all duration-300"
                         >
-                          <TableCell
-                            align="center"
-                            onClick={() => handleOpenOrderDetail(item.id)}
-                          >
+                          <TableCell align="center" onClick={() => handleOpenOrderDetail(item.id)}>
                             {index + 1}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            onClick={() => handleOpenOrderDetail(item.id)}
-                          >
-                            {item.customer}
+                          <TableCell align="center" onClick={() => handleOpenOrderDetail(item.id)}>
+                            {item.customer.toUpperCase()}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            onClick={() => handleOpenOrderDetail(item.id)}
-                          >
+                          <TableCell align="center" onClick={() => handleOpenOrderDetail(item.id)}>
                             {item.address.toUpperCase()}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            onClick={() => handleOpenOrderDetail(item.id)}
-                          >
+                          <TableCell align="center" onClick={() => handleOpenOrderDetail(item.id)}>
                             {item.phone}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            onClick={() => handleOpenOrderDetail(item.id)}
-                          >
+                          <TableCell align="center" onClick={() => handleOpenOrderDetail(item.id)}>
                             {item.total.toLocaleString()} $
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            onClick={() => handleOpenOrderDetail(item.id)}
-                          >
-                            {item.coupon === null
-                              ? "0"
-                              : item.coupon.percent * 100}{" "}
-                            %
+                          <TableCell align="center" onClick={() => handleOpenOrderDetail(item.id)}>
+                            {item.coupon === null ? "0" : item.coupon.percent * 100} %
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            onClick={() => handleOpenOrderDetail(item.id)}
-                          >
+                          <TableCell align="center" onClick={() => handleOpenOrderDetail(item.id)}>
                             {item.time}
                           </TableCell>
-                          <TableCell
-                            align="center"
-                            onClick={() => handleOpenOrderDetail(item.id)}
-                          >
-                            {item.orderStatus === "PREPARE" ? (
-                              <Chip
-                                label={item.orderStatus}
-                                color="secondary"
-                              />
-                            ) : (
-                              ""
-                            )}
-                            {item.orderStatus === "DELIVERY" ? (
-                              <Chip label={item.orderStatus} color="primary" />
-                            ) : (
-                              ""
-                            )}
-                            {item.orderStatus === "SUCCESS" ? (
-                              <Chip label={item.orderStatus} color="success" />
-                            ) : (
-                              ""
-                            )}
-                            {item.orderStatus === "CANCEL" ? (
-                              <Chip label={item.orderStatus} color="error" />
-                            ) : (
-                              ""
-                            )}
+                          <TableCell align="center" onClick={() => handleOpenOrderDetail(item.id)}>
+                            {item.orderStatus === "PREPARE" ? <Chip label={item.orderStatus} color="secondary" /> : ""}
+                            {item.orderStatus === "DELIVERY" ? <Chip label={item.orderStatus} color="primary" /> : ""}
+                            {item.orderStatus === "SUCCESS" ? <Chip label={item.orderStatus} color="success" /> : ""}
+                            {item.orderStatus === "CANCEL" ? <Chip label={item.orderStatus} color="error" /> : ""}
                           </TableCell>
                           <TableCell align="center">
                             {item.orderStatus === "PREPARE" ? (
-                              <Button
-                                variant="contained"
-                                color="error"
-                                onClick={() => handleCancelOrder(item.id)}
-                              >
+                              <Button variant="contained" color="error" onClick={() => handleCancelOrder(item.id)}>
                                 <Tooltip title="cancel">CANCEL</Tooltip>
                               </Button>
                             ) : (
@@ -232,22 +178,13 @@ function UserOrders() {
                             ) : (
                               ""
                             )}
-                            {item.orderStatus === "SUCCESS" &&
-                            item.rating === null ? (
-                              <Button
-                                variant="contained"
-                                color="success"
-                                onClick={() => handleOpenAddRating(item.id)}
-                              >
+                            {item.orderStatus === "SUCCESS" && item.rating === null ? (
+                              <Button variant="contained" color="success" onClick={() => handleOpenAddRating(item.id)}>
                                 <Tooltip title="rating">RATING</Tooltip>
                               </Button>
                             ) : (
                               item.rating && (
-                                <div
-                                  onClick={() =>
-                                    handleOpenShowRating(item.rating)
-                                  }
-                                >
+                                <div onClick={() => handleOpenShowRating(item.rating)}>
                                   {item.rating.rate === 1 ? <StarIcon /> : ""}
                                   {item.rating.rate === 2 ? (
                                     <>

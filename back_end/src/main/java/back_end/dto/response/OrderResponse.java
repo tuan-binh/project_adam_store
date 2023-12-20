@@ -3,6 +3,7 @@ package back_end.dto.response;
 import back_end.model.Coupon;
 import back_end.model.OrderStatus;
 import back_end.model.Rating;
+import back_end.model.Users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Builder
 public class OrderResponse {
 	private Long id;
+	private Users users;
 	private OrderStatus orderStatus;
 	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd/MM/yyyy")
 	private Date time;

@@ -38,7 +38,6 @@ function Checkout() {
   const handleSelectOption = (e) => {
     setOptionOrder(e.target.value);
     if (e.target.value === "different_address") {
-      setCustomer("");
       setAddress("");
       setPhone("");
     } else {
@@ -177,7 +176,7 @@ function Checkout() {
               variant="outlined"
               value={customer}
               InputProps={{
-                readOnly: optionOrder === "your_address",
+                readOnly: true,
               }}
               onChange={handleChangeCustomer}
               fullWidth
@@ -208,10 +207,7 @@ function Checkout() {
           </div>
         </div>
         <div className="flex-1 flex flex-col gap-5 ">
-          <div
-            className="bg-slate-100 px-10 py-5 shadow-2xl rounded-lg"
-            style={{ minHeight: "300px" }}
-          >
+          <div className="bg-slate-100 px-10 py-5 shadow-2xl rounded-lg" style={{ minHeight: "300px" }}>
             <h2 className="uppercase text-2xl py-2 border-b-2 border-black border-dashed">
               <b>Coupon</b>
             </h2>
@@ -241,14 +237,12 @@ function Checkout() {
                               <span>{item.coupon}</span>
                             </h3>
                             <h3>
-                              <b className="uppercase">stock :</b>{" "}
-                              <span>{item.stock}</span>
+                              <b className="uppercase">stock :</b> <span>{item.stock}</span>
                             </h3>
                           </div>
                           <div className="body">
                             <p>
-                              <b className="uppercase">Persent :</b>{" "}
-                              <span>{item.percent} %</span>
+                              <b className="uppercase">Persent :</b> <span>{item.percent} %</span>
                             </p>
                           </div>
                           <div className="flex justify-between items-end">
@@ -274,14 +268,12 @@ function Checkout() {
                     <span>{coupon.coupon}</span>
                   </h3>
                   <h3>
-                    <b className="uppercase">stock :</b>{" "}
-                    <span>{coupon.stock}</span>
+                    <b className="uppercase">stock :</b> <span>{coupon.stock}</span>
                   </h3>
                 </div>
                 <div className="body">
                   <p>
-                    <b className="uppercase">Persent :</b>{" "}
-                    <span>{coupon.percent}%</span>
+                    <b className="uppercase">Persent :</b> <span>{coupon.percent}%</span>
                   </p>
                 </div>
                 <div className="flex justify-between items-end">
@@ -291,10 +283,7 @@ function Checkout() {
                     <span> - </span>
                     <span>{coupon.endDate}</span>
                   </p>
-                  <DeleteIcon
-                    className="hover:cursor-pointer text-2xl text-red-600"
-                    onClick={handleDeleteCoupon}
-                  />
+                  <DeleteIcon className="hover:cursor-pointer text-2xl text-red-600" onClick={handleDeleteCoupon} />
                 </div>
               </div>
             )}
@@ -314,15 +303,9 @@ function Checkout() {
                     return (
                       <p key={item.id} className="flex justify-between">
                         <span>
-                          <TurnRightIcon />{" "}
-                          {item.productDetail.product.productName}
+                          <TurnRightIcon /> {item.productDetail.product.productName}
                         </span>
-                        <span>
-                          {(
-                            item.productDetail.price * item.quantity
-                          ).toLocaleString()}{" "}
-                          $
-                        </span>
+                        <span>{(item.productDetail.price * item.quantity).toLocaleString()} $</span>
                       </p>
                     );
                   })}
@@ -336,11 +319,7 @@ function Checkout() {
                   </span>
                   <span>
                     {user.cart
-                      .reduce(
-                        (sum, item) =>
-                          (sum += item.quantity * item.productDetail.price),
-                        0
-                      )
+                      .reduce((sum, item) => (sum += item.quantity * item.productDetail.price), 0)
                       .toLocaleString()}{" "}
                     $
                   </span>
@@ -354,25 +333,15 @@ function Checkout() {
               </div>
               <div className="total_after">
                 <p className="flex justify-between items-center py-5">
-                  <span className="uppercase font-semibold text-2xl">
-                    Total
-                  </span>
+                  <span className="uppercase font-semibold text-2xl">Total</span>
                   <span>
                     {coupon
                       ? (
-                          user.cart.reduce(
-                            (sum, item) =>
-                              (sum += item.quantity * item.productDetail.price),
-                            0
-                          ) *
+                          user.cart.reduce((sum, item) => (sum += item.quantity * item.productDetail.price), 0) *
                           ((100 - coupon.percent) / 100)
                         ).toLocaleString()
                       : user.cart
-                          .reduce(
-                            (sum, item) =>
-                              (sum += item.quantity * item.productDetail.price),
-                            0
-                          )
+                          .reduce((sum, item) => (sum += item.quantity * item.productDetail.price), 0)
                           .toLocaleString()}
                     $
                   </span>
@@ -380,11 +349,7 @@ function Checkout() {
               </div>
               {/* check out */}
               <div>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={handleOrderCartUser}
-                >
+                <Button variant="contained" fullWidth onClick={handleOrderCartUser}>
                   Order
                 </Button>
               </div>
