@@ -64,9 +64,5 @@ public class UserController {
 		return new ResponseEntity<>(userService.changePassword(userPassword, authentication), HttpStatus.OK);
 	}
 	
-	@PutMapping("/forget/password")
-	public ResponseEntity<String> forgetYourPassword(@RequestParam(defaultValue = "") String email) throws CustomException, MessagingException {
-		return new ResponseEntity<>(userService.forgerPassword(email),HttpStatus.OK);
-	}
 	
 }

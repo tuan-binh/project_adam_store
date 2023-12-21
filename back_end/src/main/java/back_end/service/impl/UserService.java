@@ -17,7 +17,6 @@ import back_end.security.jwt.JwtProvider;
 import back_end.security.user_principal.UserPrinciple;
 import back_end.service.IRoleService;
 import back_end.service.IUserService;
-import back_end.service.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,8 +56,6 @@ public class UserService implements IUserService {
 	private ProductMapper productMapper;
 	@Autowired
 	private UserMapper userMapper;
-	@Autowired
-	private MailService mailService;
 	
 	// login
 	@Override
@@ -244,29 +241,6 @@ public class UserService implements IUserService {
 		}
 		
 		return userMapper.toUserResponse(userRepository.save(users));
-	}
-	
-	@Override
-	public String forgerPassword(String email) throws CustomException, MessagingException {
-		Users users = userRepository.findByEmail(email).orElseThrow(() -> new CustomException("email not found"));
-		mailService.sendHTMLtoEmail(users.getEmail(),"Your New Password","<div style=\"text-align:center\">\n" +
-				  "    <h2>Mật khẩu mới</h2>\n" +
-				  "    <div style=\"border: 1px solid #000;display:inline-block;padding:10px;min-width:100px;text-align:center;font-weight:bold;border-radius:7px\">\n" +
-				  "    "+getRandomPassword()+"\n" +
-				  "    </div>\n" +
-				  "    </div>");
-		users.setPassword(passwordEncoder.encode(getRandomPassword()));
-		userRepository.save(users);
-		return "Success";
-	}
-	
-	public String getRandomPassword() {
-		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < 6; i++) {
-			assert false;
-			result.append(Math.round(Math.random() * 10));
-		}
-		return result.toString();
 	}
 	
 }

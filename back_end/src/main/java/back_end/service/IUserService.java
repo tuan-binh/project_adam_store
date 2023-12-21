@@ -31,6 +31,4 @@ public interface IUserService {
 	
 	UserResponse changePassword(UserPassword userPassword, Authentication authentication) throws CustomException;
 	
-	String forgerPassword(String email) throws CustomException, MessagingException;
-	
 }
